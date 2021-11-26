@@ -1,0 +1,51 @@
+@import 'tailwindcss/tailwind.css';
+/* 自定义样式 */
+.z-blurEffect {
+    backdrop-filter: saturate(180%) blur(20px);
+}
+
+body {
+    /* -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; */
+    user-select: none;
+}
+/* html {
+}
+body {
+ 
+}
+#app {
+  
+} */
+/* #app {
+    height: 100%;
+    background-color: red;
+} */
+.z-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+@layer utilities {
+    @variants responsive {
+        .md-container {
+        }
+        .sm-title {
+        }
+        .color-white {
+        }
+        .scroll-snap-none {
+            scroll-snap-type: none;
+        }
+        .scroll-snap-x {
+            scroll-snap-type: x;
+        }
+        .scroll-snap-y {
+            scroll-snap-type: y;
+        }
+    }
+}
