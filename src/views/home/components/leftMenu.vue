@@ -1,101 +1,103 @@
 <template>
-    <div class="relative h-full shadow-xl mr-0 md:mr-5 rounded-none md:rounded-xl w-0 md:w-40 xl:w-80 transition-all left-menu">
-        <div class="p-4 h-full overflow-hidden flex flex-col">
-            <div class="wallet" v-if="store.state.moralis?.user.accounts">
-                <div class="wallet-content">
-                    <div class="title">
-                        <img src="@/assets/image/logo.png" alt="" />
-                        <div class="truncate username">{{ store.state.moralis?.user.username }}</div>
-                        <div>,Welcome to us !</div>
-                    </div>
-                    <div class="row" @click="callCloud">
-                        <div>通用币：</div>
-                        <div>20 BNB</div>
-                    </div>
-                    <div class="row" @click="getTokenBalances">
-                        <div>商城币：</div>
-                        <div>2684 LBTT</div>
-                    </div>
-                    <div class="disconnect">
-                        <div class="disconnect-btn" @click="logout">Disconnect</div>
-                    </div>
-                </div>
-            </div>
-            <div class="index" v-else>
-                <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected">
-                    <div class="truncate connected-btn" @click="login">Connected to BSC个</div>
-                </div>
-            </div>
-            <div class="span"></div>
-            <div class="content">
-                <div class="scroll">
-                    <div class="select" :class="[{ 'select-active': IsActive('0', isShow) }]">
-                        <div class="title" @click="changeShow('0')">
-                            <div>NFT Marketplace</div>
-                            <img src="@/assets/image/top.png" alt="" />
+    <div class="left-menu">
+        <div class="menu-xl">
+            <div class="p-4 h-full overflow-hidden flex flex-col">
+                <div class="wallet" v-if="store.state.moralis?.user.accounts">
+                    <div class="wallet-content">
+                        <div class="title">
+                            <img src="@/assets/image/logo.png" alt="" />
+                            <div class="truncate username">{{ store.state.moralis?.user.username }}</div>
+                            <div>,Welcome to us !</div>
                         </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in marketplace_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
+                        <div class="row" @click="callCloud">
+                            <div>通用币：</div>
+                            <div>20 BNB</div>
+                        </div>
+                        <div class="row" @click="getTokenBalances">
+                            <div>商城币：</div>
+                            <div>2684 LBTT</div>
+                        </div>
+                        <div class="disconnect">
+                            <div class="disconnect-btn" @click="logout">Disconnect</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="index" v-else>
+                    <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
+                    <div class="connected">
+                        <div class="truncate connected-btn" @click="login">Connected to BSC个</div>
+                    </div>
+                </div>
+                <div class="span"></div>
+                <div class="content">
+                    <div class="scroll">
+                        <div class="select" :class="[{ 'select-active': IsActive('0', isShow) }]">
+                            <div class="title" @click="changeShow('0')">
+                                <div>NFT Marketplace</div>
+                                <img src="@/assets/image/top.png" alt="" />
+                            </div>
+                            <div class="list">
+                                <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in marketplace_list" :key="index">
+                                    <div class="item-content" @click="selectMenuItem(item['name'])">
+                                        <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
+                                        <div>{{ item['name'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select" :class="[{ 'select-active': IsActive('1', isShow) }]">
+                            <div class="title" @click="changeShow('1')">
+                                <div>Prediction</div>
+                                <img src="@/assets/image/top.png" alt="" />
+                            </div>
+                            <div class="list">
+                                <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in prediction_list" :key="index">
+                                    <div class="item-content" @click="selectMenuItem(item['name'])">
+                                        <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
+                                        <div>{{ item['name'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select" :class="[{ 'select-active': IsActive('2', isShow) }]">
+                            <div class="title" @click="changeShow('2')">
+                                <div>Other</div>
+                                <img src="@/assets/image/top.png" alt="" />
+                            </div>
+                            <div class="list">
+                                <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in other_list" :key="index">
+                                    <div class="item-content" @click="selectMenuItem(item['name'])">
+                                        <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
+                                        <div>{{ item['name'] }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="select" :class="[{ 'select-active': IsActive('1', isShow) }]">
-                        <div class="title" @click="changeShow('1')">
-                            <div>Prediction</div>
-                            <img src="@/assets/image/top.png" alt="" />
-                        </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in prediction_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="select" :class="[{ 'select-active': IsActive('2', isShow) }]">
-                        <div class="title" @click="changeShow('2')">
-                            <div>Other</div>
-                            <img src="@/assets/image/top.png" alt="" />
-                        </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in other_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
-            <div class="span"></div>
-            <div class="other">
-                <div class="row">
-                    <div class="item item-active">English</div>
-                    <div class="item">繁體中文</div>
-                </div>
-                <div class="row">
-                    <div class="item">User Agreement</div>
-                    <div class="item">FAQ</div>
-                </div>
-                <div class="row">
-                    <div class="item">
-                        <img src="../../../assets/image/twitter.png" alt="" />
+                <div class="span"></div>
+                <div class="other">
+                    <div class="row">
+                        <div class="item item-active">English</div>
+                        <div class="item">繁體中文</div>
                     </div>
-                    <div class="item">
-                        <img src="../../../assets/image/telegram.png" alt="" />
+                    <div class="row">
+                        <div class="item">User Agreement</div>
+                        <div class="item">FAQ</div>
                     </div>
-                    <div class="item">
-                        <img src="../../../assets/image/discord.png" alt="" />
-                    </div>
-                    <div class="item">
-                        <img src="../../../assets/image/facebook.png" alt="" />
+                    <div class="row">
+                        <div class="item">
+                            <img src="../../../assets/image/twitter.png" alt="" />
+                        </div>
+                        <div class="item">
+                            <img src="../../../assets/image/telegram.png" alt="" />
+                        </div>
+                        <div class="item">
+                            <img src="../../../assets/image/discord.png" alt="" />
+                        </div>
+                        <div class="item">
+                            <img src="../../../assets/image/facebook.png" alt="" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -227,6 +229,18 @@ const IsActive = computed(() => {
 })
 </script>
 <style lang="scss" scoped>
+.menu {
+    height: 100%;
+    background-color: red;
+}
+.menu-xl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 320px;
+    height: 100%;
+}
 .left-menu {
     background-color: rgba(0, 0, 0, 0.6);
 }

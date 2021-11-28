@@ -1,17 +1,17 @@
 <template>
-    <div>
-        <div class="invisible md:visible h-full w-screen fixed bg-scroll bg-cover bg-origin-border bg-no-repeat bg-center bg"></div>
-        <router-view v-slot="{ Component }">
-            <keep-alive>
-                <component :is="Component" :key="$route.path" v-if="$route.meta.keepAlive" />
-            </keep-alive>
-            <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive" />
-        </router-view>
-    </div>
+    <router-view v-slot="{ Component }">
+        <keep-alive>
+            <component :is="Component" :key="$route.path" v-if="$route.meta.keepAlive" />
+        </keep-alive>
+        <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive" />
+    </router-view>
 </template>
-<script setup lang="ts"></script>
-<style>
-.bg {
-    background-image: url('@/assets/image/bg_blurEffect.png');
-}
-</style>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import store from './store'
+// 监听屏幕尺寸
+onMounted(() => {
+    window.onresize = () => store.dispatch('sys/get_screen_size') // 监听屏幕尺寸
+})
+</script>
+<style></style>

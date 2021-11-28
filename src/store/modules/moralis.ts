@@ -1,7 +1,5 @@
 import { Module } from 'vuex'
 import { State } from '..'
-// @ts-ignore 忽略检测
-import Moralis from 'moralis/dist/moralis.min.js'
 
 // 定义state类型
 const states = {
@@ -17,7 +15,7 @@ const states = {
         tokenBalances: '' as string, // 令牌余额
     },
 }
-export type typeof_moralis_module = typeof states
+export type typeof_moralis = typeof states
 export default {
     namespaced: true,
     state: states,
@@ -40,4 +38,4 @@ export default {
             commit('logout', paylaod)
         },
     },
-} as Module<typeof_moralis_module, State>
+} as Module<typeof_moralis, State>

@@ -1,8 +1,7 @@
 <template>
-    <div class="relative min-h-screen transition-all right-content">
-        <loading :show="loadingShow"></loading>
-        <!-- 标题 -->
-        <div class="visible md:invisible fixed left-0 top-0 opacity-100 md:opacity-0 transition-all flex items-center justify-center w-full backdrop-blur-lg backdrop-filter h-16 title">
+    <div class="right-content">
+        <!-- <loading :show="loadingShow"></loading> -->
+        <!-- <div class="visible md:invisible fixed left-0 top-0 opacity-100 md:opacity-0 transition-all flex items-center justify-center w-full backdrop-blur-lg backdrop-filter h-16 title">
             <div class="absolute left-4 w-10">
                 <img src="../../../assets/image/logo.png" alt="" />
             </div>
@@ -15,10 +14,12 @@
                     <use xlink:href="#z-icon-other"></use>
                 </svg>
             </div>
-        </div>
-        <div class="invisible md:visible opacity-0 md:opacity-100 h-0 md:h-auto text-4xl xl:text-6xl transition-all px-5 py-3 flex items-center justify-between">{{ title }}</div>
-        <div class="rounded-xl flex items-center justify-between state">
-            <div class="m-0 md:m-1 xl:m-2 px-1 md:px-2 xl:px-4 text-md md:text-md xl:text-2xl rounded-lg transition-all cursor-pointer item" :class="[{ 'item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
+        </div> -->
+        <!-- <div class="invisible md:visible opacity-0 md:opacity-100 h-0 md:h-auto text-4xl xl:text-6xl transition-all px-5 py-3 flex items-center justify-between">{{ title }}</div>
+        <div class="">
+            <div class="rounded-xl flex items-center justify-between state">
+                <div class="m-0 md:m-1 xl:m-2 px-1 md:px-2 xl:px-4 text-md md:text-md xl:text-2xl rounded-lg transition-all cursor-pointer item" :class="[{ 'item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
+            </div>
         </div>
         <div class="px-5 flex items-center justify-between select">
             <div class="flex-1 text-base xl:text-xl">
@@ -82,12 +83,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue'
-import loading from '@/components/loading/loading.vue'
+// import loading from '@/components/loading/loading.vue'
 // @ts-ignore 忽略检测
 import Moralis from 'moralis/dist/moralis.min.js'
 import store from '../../../store'

@@ -11,13 +11,13 @@ const states = {
     age: 0 as number,
     roles: [] as role[],
 }
-export type typeof_user_module = typeof states
+export type typeof_user = typeof states
 export default {
     namespaced: true,
     state: states,
     mutations: {
         // 初始化用户
-        init(state, paylaod: typeof_user_module) {
+        init(state, paylaod: typeof_user) {
             console.log(`---------->日志输出:paylaod`, paylaod)
             // for (const key in paylaod) {
             //     state[key] = paylaod[key]
@@ -37,7 +37,7 @@ export default {
         },
     },
     actions: {
-        init({ commit }, paylaod: typeof_user_module) {
+        init({ commit }, paylaod: typeof_user) {
             commit('init', paylaod)
         },
         initRoles({ commit }, paylaod: role[]) {
@@ -47,4 +47,4 @@ export default {
             commit('addRole', paylaod)
         },
     },
-} as Module<typeof_user_module, State>
+} as Module<typeof_user, State>
