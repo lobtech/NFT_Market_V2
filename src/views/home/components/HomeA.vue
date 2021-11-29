@@ -22,8 +22,23 @@
 </template>
 <script setup lang="ts">
 import { computed, readonly, ref, provide, inject } from 'vue'
+import store from '@/store'
 
-// import Moralis from 'moralis/dist/moralis.min.js'
+const menuItemValue: any = inject('title') // 菜单标题
+const setTitle: any = inject('setTitle') // 设置菜单
+const setLoading: any = inject('setLoading') // 设置loading
+const login: any = inject('login') // 登录
+const logout: any = inject('logout') // 注销
+const toPage: any = inject('toPage') // 跳转到新页面
+const IsActive: any = inject('IsActive') // 是否激活
+const changeShow: any = inject('changeShow') // 是否显示
+const selectMenuItem: any = inject('selectMenuItem') // 设置子菜单
+const marketplace_list: any = inject('marketplace_list') // 菜单列表
+const prediction_list: any = inject('prediction_list') // 菜单列表
+const other_list: any = inject('other_list') // 菜单列表
+
+const accounts = computed(() => store.state.moralis?.user.accounts)
+const username = computed(() => store.state.moralis?.user.username)
 const title = inject('title') as string // 菜单标题
 </script>
 
