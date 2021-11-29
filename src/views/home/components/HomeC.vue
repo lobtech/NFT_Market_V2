@@ -1,7 +1,13 @@
 <template>
     <div class="relative home">
         <div class="left-menu">
-            <!-- <div class="wallet" v-if="accounts">
+            <div class="user" v-if="!accounts">
+                <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
+                <div class="connected">
+                    <div class="truncate connected-btn" @click="login"></div>
+                </div>
+            </div>
+            <div v-else class="wallet">
                 <div class="wallet-content">
                     <div class="title">
                         <img src="@/assets/image/logo.png" alt="" />
@@ -21,13 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="index" v-else>
-                <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected">
-                    <div class="truncate connected-btn" @click="login">Connected to BSC个</div>
-                </div>
-            </div> -->
-            <!-- <div class="span"></div> -->
+            <div class="span"></div>
             <!-- <div class="content">
                 <div class="scroll">
                     <div class="select" :class="[{ 'select-active': IsActive('0') }]">
@@ -131,270 +131,285 @@ const username = computed(() => store.state.moralis?.user.username)
     background-repeat: no-repeat;
     padding: 20px;
     min-height: 600px;
-    min-width: 640px;
     overflow: auto;
     height: 100%;
     display: flex;
-}
-
-.left-menu {
-    height: 100%;
-    width: 80px;
-    max-width: 300px;
-    background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    .wallet {
-        height: 240px;
+    .left-menu {
+        height: 100%;
+        width: 80px;
+        max-width: 300px;
         padding: 10px;
-        .wallet-content {
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 230ms ease-out;
+        .user {
+            width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            .title {
-                padding: 10px;
-                height: 80px;
+            align-items: center;
+            .logo {
+                padding: 30px;
                 display: flex;
+                justify-content: center;
                 align-items: center;
-                color: rgba(255, 255, 255, 0.5);
+
                 img {
-                    width: 40px;
-                    margin-right: 10px;
-                }
-                .username {
-                    width: 60px;
+                    width: 100%;
+                    max-width: 110px;
+                    cursor: pointer;
                 }
             }
-            .row {
-                padding-left: 60px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                color: rgba(255, 255, 255, 0.5);
-            }
-            .disconnect {
-                width: 100%;
-                height: 60px;
+            .connected {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 14px;
-                .disconnect-btn {
-                    width: 120px;
-                    height: 30px;
-                    border-radius: 20px;
-                    background-color: rgba(173, 0, 0, 0.5);
-                    color: rgba(255, 255, 255, 0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                padding: 0 10px;
+                .connected-btn {
+                    padding: 10px 16px;
+                    border-radius: 14px;
+                    background-color: #7092c0;
+                    color: rgba(255, 255, 255, 0.8);
+                    font-size: 4px;
                     cursor: pointer;
+                    text-align: center;
+                    overflow: hidden;
                     transition: all 230ms ease-out;
+                    &:before {
+                        content: 'Connected';
+                    }
+                    @media (min-width: 1080px) {
+                        max-width: 230px;
+                        font-size: 16px;
+                        &:before {
+                            content: 'Connected to BSC个';
+                        }
+                    }
                     &:hover {
-                        background-color: rgba(173, 0, 0, 1);
-                        color: rgba(255, 255, 255, 0.5);
+                        transition: all 230ms ease-out;
+                        background-color: #2d5791;
+                        color: rgba(255, 255, 255, 1);
+                    }
+                }
+                .connected-btn-close {
+                    background-color: #2d5791;
+                    &:hover {
+                        background-color: #7092c0;
+                        color: rgba(255, 255, 255, 1);
                     }
                 }
             }
         }
-    }
-    .index {
-        width: 100%;
-        height: 240px;
-        padding: 10px;
-        .logo {
-            height: 180px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            img {
-                position: relative;
-                width: 160px;
-                cursor: pointer;
-            }
-        }
-        .connected {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            .connected-btn {
-                width: 220px;
-                height: 36px;
-                padding: 0 20px;
-                line-height: 36px;
-                border-radius: 14px;
-                background-color: #7092c0;
-                color: rgba(255, 255, 255, 0.8);
-                font-size: 18px;
-                cursor: pointer;
-                transition: all 230ms ease-out;
-                &:hover {
-                    background-color: #2d5791;
-                    color: rgba(255, 255, 255, 1);
+
+        .wallet {
+            padding: 10px;
+            overflow: hidden;
+            .wallet-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .title {
+                    padding: 10px;
+                    height: 80px;
+                    display: flex;
+                    align-items: center;
+                    color: rgba(255, 255, 255, 0.5);
+                    img {
+                        width: 40px;
+                        margin-right: 10px;
+                    }
+                    .username {
+                        width: 60px;
+                    }
                 }
-            }
-            .connected-btn-close {
-                background-color: #2d5791;
-                &:hover {
-                    background-color: #7092c0;
-                    color: rgba(255, 255, 255, 1);
+                .row {
+                    padding-left: 60px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    color: rgba(255, 255, 255, 0.5);
                 }
-            }
-        }
-    }
-
-    .content {
-        width: 100%;
-        flex: 1;
-        height: 0;
-        padding: 0 20px;
-        display: flex;
-        flex-direction: column;
-
-        .scroll {
-            width: 100%;
-            padding: 0 20px;
-            flex: 1;
-            height: 0;
-            color: rgba(255, 255, 255, 0.8);
-            overflow-y: auto;
-
-            .select {
-                // background-color: red;
-                & > .title {
-                    font-size: 18px;
+                .disconnect {
+                    width: 100%;
                     height: 60px;
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    padding: 0 10px;
-                    cursor: pointer;
-                    transition: all 230ms ease-out;
-                    color: rgba(255, 255, 255, 1);
-                    opacity: 0.5;
-                    img {
-                        height: 10px;
-                        transition: all 230ms ease-out;
-                    }
-                    .z-icon {
-                        font-size: 20px;
-                        font-weight: bolder;
-                    }
-                    &:hover {
-                        opacity: 1;
-                    }
-                }
-                .list {
-                    max-height: 0px;
-                    overflow: hidden;
-                    transition: all 230ms ease-out;
-                    .item {
-                        height: 90px;
+                    justify-content: center;
+                    font-size: 14px;
+                    .disconnect-btn {
+                        width: 120px;
+                        height: 30px;
+                        border-radius: 20px;
+                        background-color: rgba(173, 0, 0, 0.5);
+                        color: rgba(255, 255, 255, 0.5);
                         display: flex;
-                        flex-direction: column;
+                        align-items: center;
                         justify-content: center;
-                        .item-content {
-                            font-size: 18px;
-                            height: 70px;
-                            display: flex;
-                            align-items: center;
-                            padding: 0 20px;
-                            cursor: pointer;
-                            transition: all 230ms ease-out;
-                            color: rgba(255, 255, 255, 1);
-                            opacity: 0.5;
-                            border-radius: 34px 0 0 34px;
-                            img {
-                                width: 40px;
-                                height: 40px;
-                                margin-right: 10px;
-                            }
-                            &:hover {
-                                opacity: 1;
-                                background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
-                            }
+                        cursor: pointer;
+                        transition: all 230ms ease-out;
+                        &:hover {
+                            background-color: rgba(173, 0, 0, 1);
+                            color: rgba(255, 255, 255, 0.5);
                         }
                     }
-                    .item-active > .item-content {
-                        opacity: 1;
-                        background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
-                    }
-                }
-            }
-            .select-active {
-                .title {
-                    opacity: 1;
-                    img {
-                        transform: rotate(180deg);
-                    }
-                }
-                .list {
-                    max-height: 300px;
                 }
             }
         }
-    }
-    .other {
-        height: 120px;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 14px;
-        .row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
-            .item {
-                padding: 0 10px;
-                transition: all 230ms ease-out;
-                cursor: pointer;
-                &:hover {
-                    color: rgba(255, 255, 255, 1);
-                    img {
-                        opacity: 1;
-                    }
-                }
-                img {
-                    width: 20px;
-                    opacity: 0.5;
-                    transition: all 230ms ease-out;
-                }
-            }
-            .item-active {
-                color: rgba(255, 255, 255, 1);
-            }
-        }
-    }
-    .span {
-        margin: 10px 0;
-        width: 50px;
-        height: 1px;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-    /* 滚动槽（轨道）宽高 */
-    ::-webkit-scrollbar {
-        width: 0; /*对垂直流动条有效*/
-        height: 20px; /*对水平流动条有效*/
-    }
-    /* 滚动槽（轨道）样式 */
-    ::-webkit-scrollbar-track {
-        background-color: rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
 
-    /*定义滑块颜色、内阴影及圆角*/
-    ::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background-color: #7092c0;
+        .content {
+            width: 100%;
+            flex: 1;
+            height: 0;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+
+            .scroll {
+                width: 100%;
+                padding: 0 20px;
+                flex: 1;
+                height: 0;
+                color: rgba(255, 255, 255, 0.8);
+                overflow-y: auto;
+
+                .select {
+                    // background-color: red;
+                    & > .title {
+                        font-size: 18px;
+                        height: 60px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 0 10px;
+                        cursor: pointer;
+                        transition: all 230ms ease-out;
+                        color: rgba(255, 255, 255, 1);
+                        opacity: 0.5;
+                        img {
+                            height: 10px;
+                            transition: all 230ms ease-out;
+                        }
+                        .z-icon {
+                            font-size: 20px;
+                            font-weight: bolder;
+                        }
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+                    .list {
+                        max-height: 0px;
+                        overflow: hidden;
+                        transition: all 230ms ease-out;
+                        .item {
+                            height: 90px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            .item-content {
+                                font-size: 18px;
+                                height: 70px;
+                                display: flex;
+                                align-items: center;
+                                padding: 0 20px;
+                                cursor: pointer;
+                                transition: all 230ms ease-out;
+                                color: rgba(255, 255, 255, 1);
+                                opacity: 0.5;
+                                border-radius: 34px 0 0 34px;
+                                img {
+                                    width: 40px;
+                                    height: 40px;
+                                    margin-right: 10px;
+                                }
+                                &:hover {
+                                    opacity: 1;
+                                    background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
+                                }
+                            }
+                        }
+                        .item-active > .item-content {
+                            opacity: 1;
+                            background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
+                        }
+                    }
+                }
+                .select-active {
+                    .title {
+                        opacity: 1;
+                        img {
+                            transform: rotate(180deg);
+                        }
+                    }
+                    .list {
+                        max-height: 300px;
+                    }
+                }
+            }
+        }
+        .other {
+            height: 120px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            .row {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 36px;
+                .item {
+                    padding: 0 10px;
+                    transition: all 230ms ease-out;
+                    cursor: pointer;
+                    &:hover {
+                        color: rgba(255, 255, 255, 1);
+                        img {
+                            opacity: 1;
+                        }
+                    }
+                    img {
+                        width: 20px;
+                        opacity: 0.5;
+                        transition: all 230ms ease-out;
+                    }
+                }
+                .item-active {
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+        }
+        .span {
+            margin: 20px;
+            width: 20%;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        /* 滚动槽（轨道）宽高 */
+        ::-webkit-scrollbar {
+            width: 0; /*对垂直流动条有效*/
+            height: 20px; /*对水平流动条有效*/
+        }
+        /* 滚动槽（轨道）样式 */
+        ::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /*定义滑块颜色、内阴影及圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-color: #7092c0;
+        }
     }
-}
-.right-content {
-    flex: 1;
-    margin-left: 20px;
-    height: 100%;
-    background-color: rgba(36, 39, 54, 1);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    .right-content {
+        flex: 1;
+        margin-left: 20px;
+        height: 100%;
+        background-color: rgba(36, 39, 54, 1);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
 }
 </style>
