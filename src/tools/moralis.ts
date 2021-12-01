@@ -6,15 +6,18 @@ const Moralis = (window as any).Moralis // 引用全局的Moralis
 const Web3 = (window as any).Web3 // 引用全局的web3
 
 const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
-const chain = 'avalanche' as string // 区块链名
-// const chain = 'bsc testnet' as string // 区块链名
-// const serverUrl = 'https://iryujqeq3c0k.usemoralis.com:2053/server' as string // 服务器地址
-// const appId = 'pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU' as string // appid
+const isTest = true // 测试环境
+// 正式网
+let chain = 'avalanche' as string // 区块链名
+let serverUrl = 'https://av6uwrkea2v6.usemoralis.com:2053/server' // 服务器地址
+let appId = 'KRhsgl0BHaod6RoqUz0m2aIILRYjSvmQzg1idYa9' // appid
 
-const serverUrl = 'https://av6uwrkea2v6.usemoralis.com:2053/server'
-// const serverUrl = "https://iryujqeq3c0k.usemoralis.com:2053/server";
-const appId = 'KRhsgl0BHaod6RoqUz0m2aIILRYjSvmQzg1idYa9'
-// const appId = "pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU";
+// 测试网
+if (isTest) {
+    chain = 'bsc testnet' as string // 区块链名
+    serverUrl = 'https://iryujqeq3c0k.usemoralis.com:2053/server' as string // 服务器地址
+    appId = 'pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU' as string // appid
+}
 
 // 转移资产
 const transfer = async () => {
@@ -201,6 +204,7 @@ export default {
     currentAsync,
     start,
     Moralis,
+    // 以下为 web3 原生方法
     send,
     call,
     purchase,

@@ -567,7 +567,7 @@ const nftTreader = {
         },
     ],
 }
-// 市场合约
+// 测试二
 const test2 = {
     address: '0xE81C077d2258A08869622f984733B0aF8843fD2c',
     abi: [
