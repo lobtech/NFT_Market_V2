@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { computed, readonly, ref, provide, inject } from 'vue'
 import store from '@/store'
-const title = inject('title') as string // 菜单标题
+import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
 </script>
 
 <style lang="less" scoped>

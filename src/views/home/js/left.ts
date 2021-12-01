@@ -30,8 +30,11 @@ const login = async (show: boolean = true) => {
 
 // 登出
 const logout = async () => {
+    setLoading(true)
+    // console.log(`---------->未登录:user`, user)
     await web3.logOut()
     store.dispatch('moralis/logout', true)
+    setLoading(false)
 }
 
 // marketplace菜单项

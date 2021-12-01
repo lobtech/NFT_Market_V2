@@ -22,10 +22,8 @@ export default {
     mutations: {
         // 初始化Moralis
         async init(state, user: any) {
-            console.log(`---------->日志输出:user`, user)
             state.user.accounts = user.accounts[0] // 保存用户信息
             state.user.username = user.username // 保存用户信息
-            console.log(`---------->日志输出:state.user`, state.user)
         },
         // logout
         async logout(state, paylaod: boolean) {

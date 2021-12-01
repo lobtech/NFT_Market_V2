@@ -1,25 +1,11 @@
 <template>
-    <div class="relative homeB">
+    <div class="homeB">
         <loading :show="loadingShow"></loading>
         <div class="left-menu">
-            <div class="user" v-if="!accounts">
+            <div class="user">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected">
-                    <div class="truncate connected-btn" @click="login()">Connected</div>
-                </div>
-            </div>
-            <div v-else class="wallet">
-                <div class="wallet-content">
-                    <div class="item">
-                        <div>20</div>
-                        <div>BNB</div>
-                    </div>
-                    <div class="item">
-                        <div>2684</div>
-                        <div>LBTT</div>
-                    </div>
-                    <div class="disconnect" @click="logout">Disconnect</div>
-                </div>
+                <div class="connected" v-if="!accounts" @click="login()">Connected</div>
+                <div class="connected connected-close" v-else @click="logout()">{{ username }}</div>
             </div>
             <div class="span"></div>
             <div class="content">
@@ -92,12 +78,16 @@ import web3 from '@/tools/moralis'
 import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
 // import { loadingShow, setLoading, title, setTitle } from '../js/right'
 const accounts = computed(() => store.state.moralis?.user.accounts)
-const username = computed(() => store.state.moralis?.user.username)
+const username = computed(() => {
+    let username = store.state.moralis?.user.username as string
+    return `${username.slice(0, 4)}****${username.slice(-4)}`
+})
 login(false)
 </script>
 
 <style lang="less" scoped>
 .homeB {
+    position: relative;
     background-image: url('@/assets/image/bg_blurEffect.png');
     background-size: cover;
     background-position: center;
@@ -136,78 +126,33 @@ login(false)
                 }
             }
             .connected {
-                .connected-btn {
-                    height: 16px;
-                    max-height: 44px;
-                    width: 60px;
-                    max-width: 200px;
-                    padding: 12px 20px;
-                    border-radius: 14px;
-                    background-color: #7092c0;
-                    color: rgba(255, 255, 255, 0.8);
-                    font-size: 1.5vw;
-                    cursor: pointer;
-                    text-align: center;
-                    overflow: hidden;
+                height: 16px;
+                max-height: 44px;
+                width: 60px;
+                max-width: 200px;
+                padding: 12px 20px;
+                border-radius: 14px;
+                background-color: #7092c0;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 1.5vw;
+                cursor: pointer;
+                text-align: center;
+                overflow: hidden;
+                transition: all 230ms ease-out;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:hover {
                     transition: all 230ms ease-out;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    &:hover {
-                        transition: all 230ms ease-out;
-                        background-color: #2d5791;
-                        color: rgba(255, 255, 255, 1);
-                    }
-                }
-                .connected-btn-close {
                     background-color: #2d5791;
-                    &:hover {
-                        background-color: #7092c0;
-                        color: rgba(255, 255, 255, 1);
-                    }
+                    color: rgba(255, 255, 255, 1);
                 }
             }
-        }
-
-        .wallet {
-            padding: 10px;
-            width: 100%;
-            overflow: hidden;
-            .wallet-content {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                .item {
-                    padding: 10px 20px;
-                    display: flex;
-                    align-items: center;
-                    flex-direction: column;
-                    color: rgba(255, 255, 255, 0.5);
-                    justify-content: space-between;
-                    div {
-                        padding: 4px;
-                    }
-                }
-                .disconnect {
-                    margin-top: 10px;
-                    height: 16px;
-                    max-height: 44px;
-                    width: 60px;
-                    max-width: 200px;
-                    padding: 12px 20px;
-                    border-radius: 20px;
-                    background-color: rgba(173, 0, 0, 0.5);
-                    color: rgba(255, 255, 255, 0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    transition: all 230ms ease-out;
-                    &:hover {
-                        background-color: rgba(173, 0, 0, 1);
-                        color: rgba(255, 255, 255, 0.5);
-                    }
+            .connected-close {
+                background-color: #2d5791;
+                &:hover {
+                    background-color: #9e300f;
+                    color: rgba(255, 255, 255, 1);
                 }
             }
         }

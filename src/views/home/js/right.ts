@@ -42,7 +42,7 @@ const getData = async (type: string = title.value) => {
         // 超市数据
         case 'Market':
             {
-                const res = await Moralis.Web3API.token.getNFTOwners({ chain, address })
+                const res = await web3.Moralis.Web3API.token.getNFTOwners({ chain, address })
                 list.value = res.result
             }
             break
@@ -53,7 +53,7 @@ const getData = async (type: string = title.value) => {
                     chain: 'ropsten', // 区块链名（可选）
                     address, // 指定合约地址（可选）
                 }
-                const res = await Moralis.Web3API.account.getNFTs(options)
+                const res = await web3.Moralis.Web3API.account.getNFTs(options)
                 list.value = res.result
             }
             break

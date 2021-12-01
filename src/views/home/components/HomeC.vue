@@ -1,31 +1,11 @@
 <template>
-    <div class="relative homeC">
+    <div class="homeC">
+        <loading :show="loadingShow"></loading>
         <div class="left-menu">
-            <div class="user" v-if="!accounts">
+            <div class="user">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected">
-                    <div class="truncate connected-btn" @click="login()">Connected to BSC个</div>
-                </div>
-            </div>
-            <div v-else class="wallet">
-                <div class="wallet-content">
-                    <div class="title">
-                        <img src="@/assets/image/logo.png" alt="" />
-                        <div class="truncate username">{{ username }}</div>
-                        <div>,Welcome to us !</div>
-                    </div>
-                    <div class="row">
-                        <div>通用币：</div>
-                        <div>20 BNB</div>
-                    </div>
-                    <div class="row">
-                        <div>商城币：</div>
-                        <div>2684 LBTT</div>
-                    </div>
-                    <div class="disconnect">
-                        <div class="disconnect-btn" @click="logout">Disconnect</div>
-                    </div>
-                </div>
+                <div class="connected" v-if="!accounts" @click="login()">Connected</div>
+                <div class="connected connected-close" v-else @click="logout()">{{ username }}</div>
             </div>
             <div class="span"></div>
             <div class="content">
@@ -102,15 +82,20 @@
     </div>
 </template>
 <script setup lang="ts">
+import loading from '@/components/loading/loading.vue'
 import store from '@/store'
 import { computed, ref } from 'vue'
 import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
 const accounts = computed(() => store.state.moralis?.user.accounts)
-const username = computed(() => store.state.moralis?.user.username)
+const username = computed(() => {
+    let username = store.state.moralis?.user.username as string
+    return `${username.slice(0, 5)}******${username.slice(-5)}`
+})
 </script>
 
 <style lang="less" scoped>
 .homeC {
+    position: relative;
     background-image: url('@/assets/image/bg_blurEffect.png');
     background-size: cover;
     background-position: center;
@@ -136,110 +121,48 @@ const username = computed(() => store.state.moralis?.user.username)
         overflow: hidden;
         .user {
             width: 100%;
+            max-width: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
             .logo {
-                width: 100%;
                 padding: 30px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
                 img {
                     width: 100%;
-                    max-width: 140px;
                     cursor: pointer;
                 }
             }
             .connected {
+                height: 16px;
+                max-height: 44px;
+                width: 60px;
+                max-width: 200px;
+                padding: 12px 20px;
+                border-radius: 14px;
+                background-color: #7092c0;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 18px;
+                cursor: pointer;
+                text-align: center;
+                overflow: hidden;
+                transition: all 230ms ease-out;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                .connected-btn {
-                    height: 16px;
-                    max-height: 44px;
-                    width: 60px;
-                    max-width: 200px;
-                    padding: 12px 20px;
-                    border-radius: 14px;
-                    background-color: #7092c0;
-                    color: rgba(255, 255, 255, 0.8);
-                    font-size: 16px;
-                    cursor: pointer;
-                    text-align: center;
-                    overflow: hidden;
+                &:hover {
                     transition: all 230ms ease-out;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    &:hover {
-                        transition: all 230ms ease-out;
-                        background-color: #2d5791;
-                        color: rgba(255, 255, 255, 1);
-                    }
-                }
-                .connected-btn-close {
                     background-color: #2d5791;
-                    &:hover {
-                        background-color: #7092c0;
-                        color: rgba(255, 255, 255, 1);
-                    }
+                    color: rgba(255, 255, 255, 1);
                 }
             }
-        }
-
-        .wallet {
-            padding: 10px 20px;
-            overflow: hidden;
-            .wallet-content {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                .title {
-                    padding: 10px;
-                    height: 80px;
-                    display: flex;
-                    align-items: center;
-                    color: rgba(255, 255, 255, 0.5);
-                    img {
-                        width: 40px;
-                        margin-right: 10px;
-                    }
-                    .username {
-                        width: 60px;
-                    }
-                }
-                .row {
-                    padding-left: 60px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    color: rgba(255, 255, 255, 0.5);
-                }
-                .disconnect {
-                    width: 100%;
-                    height: 60px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 14px;
-                    .disconnect-btn {
-                        width: 120px;
-                        height: 30px;
-                        border-radius: 20px;
-                        background-color: rgba(173, 0, 0, 0.5);
-                        color: rgba(255, 255, 255, 0.5);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        transition: all 230ms ease-out;
-                        &:hover {
-                            background-color: rgba(173, 0, 0, 1);
-                            color: rgba(255, 255, 255, 0.5);
-                        }
-                    }
+            .connected-close {
+                background-color: #2d5791;
+                &:hover {
+                    background-color: #9e300f;
+                    color: rgba(255, 255, 255, 1);
                 }
             }
         }
