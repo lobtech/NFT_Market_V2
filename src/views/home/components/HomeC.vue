@@ -1,10 +1,10 @@
 <template>
-    <div class="relative home">
+    <div class="relative homeC">
         <div class="left-menu">
             <div class="user" v-if="!accounts">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
                 <div class="connected">
-                    <div class="truncate connected-btn" @click="login"></div>
+                    <div class="truncate connected-btn" @click="login()">Connected to BSC个</div>
                 </div>
             </div>
             <div v-else class="wallet">
@@ -28,57 +28,55 @@
                 </div>
             </div>
             <div class="span"></div>
-            <!-- <div class="content">
-                <div class="scroll">
-                    <div class="select" :class="[{ 'select-active': IsActive('0') }]">
-                        <div class="title" @click="changeShow('0')">
-                            <div>NFT Marketplace</div>
-                            <img src="@/assets/image/top.png" alt="" />
-                        </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in marketplace_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="content">
+                <div class="select" :class="[{ 'select-active': IsActive('0', isShow) }]">
+                    <div class="title" @click="changeShow('0')">
+                        <div>NFT Marketplace</div>
+                        <img src="@/assets/image/top.png" alt="" />
                     </div>
-                    <div class="select" :class="[{ 'select-active': IsActive('1') }]">
-                        <div class="title" @click="changeShow('1')">
-                            <div>Prediction</div>
-                            <img src="@/assets/image/top.png" alt="" />
-                        </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in prediction_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="select" :class="[{ 'select-active': IsActive('2') }]">
-                        <div class="title" @click="changeShow('2')">
-                            <div>Other</div>
-                            <img src="@/assets/image/top.png" alt="" />
-                        </div>
-                        <div class="list">
-                            <div class="item" :class="[{ 'item-active': IsActive(item['name'], menuItemValue) }]" v-for="(item, index) in other_list" :key="index">
-                                <div class="item-content" @click="selectMenuItem(item['name'])">
-                                    <img :src="IsActive(item['name'], menuItemValue) ? item['icon_active'] : item['icon']" alt="" />
-                                    <div>{{ item['name'] }}</div>
-                                </div>
+                    <div class="list">
+                        <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in marketplace_list" :key="index">
+                            <div class="item-content" @click="selectMenuItem(item['name'])">
+                                <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                                <div>{{ item['name'] }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div> -->
-            <!-- <div class="span"></div> -->
-            <!-- <div class="other">
+                <div class="select" :class="[{ 'select-active': IsActive('1', isShow) }]">
+                    <div class="title" @click="changeShow('1')">
+                        <div>Prediction</div>
+                        <img src="@/assets/image/top.png" alt="" />
+                    </div>
+                    <div class="list">
+                        <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in prediction_list" :key="index">
+                            <div class="item-content" @click="selectMenuItem(item['name'])">
+                                <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                                <div>{{ item['name'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="select" :class="[{ 'select-active': IsActive('2', isShow) }]">
+                    <div class="title" @click="changeShow('2')">
+                        <div>Other</div>
+                        <img src="@/assets/image/top.png" alt="" />
+                    </div>
+                    <div class="list">
+                        <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in other_list" :key="index">
+                            <div class="item-content" @click="selectMenuItem(item['name'])">
+                                <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                                <div>{{ item['name'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span"></div>
+            <div class="other">
                 <div class="row">
                     <div class="item item-active">English</div>
-                    <div class="item">繁體中文</div>
+                    <div class="item">繁体中文</div>
                 </div>
                 <div class="row">
                     <div class="item">User Agreement</div>
@@ -98,33 +96,21 @@
                         <img src="../../../assets/image/facebook.png" alt="" />
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="right-content"></div>
     </div>
 </template>
 <script setup lang="ts">
 import store from '@/store'
-import { computed, readonly, ref, provide, inject } from 'vue'
-const menuItemValue: any = inject('title') // 菜单标题
-const setTitle: any = inject('setTitle') // 设置菜单
-const setLoading: any = inject('setLoading') // 设置loading
-const login: any = inject('login') // 登录
-const logout: any = inject('logout') // 注销
-const IsActive: any = inject('IsActive') // 是否激活
-const toPage: any = inject('toPage') // 跳转到新页面
-const changeShow: any = inject('changeShow') // 是否显示
-const selectMenuItem: any = inject('selectMenuItem') // 设置子菜单
-const marketplace_list: any = inject('marketplace_list')
-const prediction_list: any = inject('prediction_list')
-const other_list: any = inject('other_list')
-
+import { computed, ref } from 'vue'
+import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
 const accounts = computed(() => store.state.moralis?.user.accounts)
 const username = computed(() => store.state.moralis?.user.username)
 </script>
 
 <style lang="less" scoped>
-.home {
+.homeC {
     background-image: url('@/assets/image/bg_blurEffect.png');
     background-size: cover;
     background-position: center;
@@ -137,6 +123,7 @@ const username = computed(() => store.state.moralis?.user.username)
     .left-menu {
         height: 100%;
         width: 80px;
+        min-width: 240px;
         max-width: 300px;
         padding: 10px;
         background-color: rgba(0, 0, 0, 0.6);
@@ -146,12 +133,14 @@ const username = computed(() => store.state.moralis?.user.username)
         flex-direction: column;
         align-items: center;
         transition: all 230ms ease-out;
+        overflow: hidden;
         .user {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             .logo {
+                width: 100%;
                 padding: 30px;
                 display: flex;
                 justify-content: center;
@@ -159,7 +148,7 @@ const username = computed(() => store.state.moralis?.user.username)
 
                 img {
                     width: 100%;
-                    max-width: 110px;
+                    max-width: 140px;
                     cursor: pointer;
                 }
             }
@@ -167,27 +156,23 @@ const username = computed(() => store.state.moralis?.user.username)
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 0 10px;
                 .connected-btn {
-                    padding: 10px 16px;
+                    height: 16px;
+                    max-height: 44px;
+                    width: 60px;
+                    max-width: 200px;
+                    padding: 12px 20px;
                     border-radius: 14px;
                     background-color: #7092c0;
                     color: rgba(255, 255, 255, 0.8);
-                    font-size: 4px;
+                    font-size: 16px;
                     cursor: pointer;
                     text-align: center;
                     overflow: hidden;
                     transition: all 230ms ease-out;
-                    &:before {
-                        content: 'Connected';
-                    }
-                    @media (min-width: 1080px) {
-                        max-width: 230px;
-                        font-size: 16px;
-                        &:before {
-                            content: 'Connected to BSC个';
-                        }
-                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     &:hover {
                         transition: all 230ms ease-out;
                         background-color: #2d5791;
@@ -205,7 +190,7 @@ const username = computed(() => store.state.moralis?.user.username)
         }
 
         .wallet {
-            padding: 10px;
+            padding: 10px 20px;
             overflow: hidden;
             .wallet-content {
                 display: flex;
@@ -263,125 +248,129 @@ const username = computed(() => store.state.moralis?.user.username)
             width: 100%;
             flex: 1;
             height: 0;
-            padding: 0 20px;
+            padding: 0 30px;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            color: rgba(255, 255, 255, 0.8);
 
-            .scroll {
-                width: 100%;
-                padding: 0 20px;
-                flex: 1;
-                height: 0;
-                color: rgba(255, 255, 255, 0.8);
-                overflow-y: auto;
-
-                .select {
-                    // background-color: red;
-                    & > .title {
-                        font-size: 18px;
-                        height: 60px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 0 10px;
-                        cursor: pointer;
+            .select {
+                // background-color: red;
+                & > .title {
+                    font-size: 18px;
+                    height: 60px;
+                    max-height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    cursor: pointer;
+                    transition: all 230ms ease-out;
+                    color: rgba(255, 255, 255, 1);
+                    opacity: 0.5;
+                    img {
+                        height: 20%;
                         transition: all 230ms ease-out;
-                        color: rgba(255, 255, 255, 1);
-                        opacity: 0.5;
-                        img {
-                            height: 10px;
-                            transition: all 230ms ease-out;
-                        }
-                        .z-icon {
-                            font-size: 20px;
-                            font-weight: bolder;
-                        }
-                        &:hover {
-                            opacity: 1;
-                        }
                     }
-                    .list {
-                        max-height: 0px;
-                        overflow: hidden;
-                        transition: all 230ms ease-out;
-                        .item {
-                            height: 90px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            .item-content {
-                                font-size: 18px;
-                                height: 70px;
-                                display: flex;
-                                align-items: center;
-                                padding: 0 20px;
-                                cursor: pointer;
-                                transition: all 230ms ease-out;
-                                color: rgba(255, 255, 255, 1);
-                                opacity: 0.5;
-                                border-radius: 34px 0 0 34px;
-                                img {
-                                    width: 40px;
-                                    height: 40px;
-                                    margin-right: 10px;
-                                }
-                                &:hover {
-                                    opacity: 1;
-                                    background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
-                                }
-                            }
-                        }
-                        .item-active > .item-content {
-                            opacity: 1;
-                            background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
-                        }
+                    .z-icon {
+                        font-size: 20px;
+                        font-weight: bolder;
+                    }
+                    &:hover {
+                        opacity: 1;
                     }
                 }
-                .select-active {
-                    .title {
-                        opacity: 1;
-                        img {
-                            transform: rotate(180deg);
+                .list {
+                    max-height: 0px;
+                    overflow: hidden;
+                    transition: all 230ms ease-out;
+                    .item {
+                        height: 80px;
+                        max-height: 80px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        padding: 4px 0;
+                        // padding: 5px 0;
+                        .item-content {
+                            font-size: 18px;
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            padding: 10px 10px;
+                            cursor: pointer;
+                            transition: all 230ms ease-out;
+                            color: rgba(255, 255, 255, 1);
+                            opacity: 0.5;
+                            border-radius: 34px 0 0 34px;
+                            img {
+                                height: 100%;
+                                margin-right: 10px;
+                            }
+                            &:hover {
+                                opacity: 1;
+                                background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
+                            }
                         }
                     }
-                    .list {
-                        max-height: 300px;
+                    .item-active > .item-content {
+                        opacity: 1;
+                        background: linear-gradient(to right, #7092c0, rgba(0, 0, 0, 0));
                     }
+                }
+            }
+            .select-active {
+                .title {
+                    opacity: 1;
+                    img {
+                        transform: rotate(180deg);
+                    }
+                }
+                .list {
+                    max-height: 300px;
                 }
             }
         }
         .other {
-            height: 120px;
             color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
+            width: 100%;
+            overflow: hidden;
+            padding: 10px 0;
             .row {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                height: 36px;
+                height: 20px;
+                max-height: 50px;
+                width: 100%;
+                margin: auto;
+                max-width: 240px;
                 .item {
                     padding: 0 10px;
-                    transition: all 230ms ease-out;
                     cursor: pointer;
-                    &:hover {
-                        color: rgba(255, 255, 255, 1);
-                        img {
-                            opacity: 1;
-                        }
-                    }
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 14px;
+                    opacity: 0.5;
+                    transition: all 230ms ease-out;
+                    color: rgba(255, 255, 255, 1);
                     img {
-                        width: 20px;
-                        opacity: 0.5;
-                        transition: all 230ms ease-out;
+                        min-width: 20px;
+                        width: 80%;
+                        max-width: 30px;
+                    }
+                    &:hover {
+                        opacity: 1;
                     }
                 }
                 .item-active {
-                    color: rgba(255, 255, 255, 1);
+                    opacity: 1;
                 }
             }
         }
         .span {
-            margin: 20px;
+            margin: 20px 0;
             width: 20%;
             height: 1px;
             background-color: rgba(255, 255, 255, 0.1);

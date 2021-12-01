@@ -10,13 +10,11 @@
     "dependencies": {
         "axios": "^0.24.0",
         "less": "^4.1.2",
-        "moralis": "^0.0.135",
         "vue": "^3.2.16",
         "vue-router": "^4.0.12",
         "vuex": "^4.0.2"
     },
     "devDependencies": {
-        "@types/node": "^16.11.9",
         "@vitejs/plugin-vue": "^1.9.3",
         "postcss-preset-env": "^7.0.1",
         "postcss-px-to-viewport": "^1.1.1",

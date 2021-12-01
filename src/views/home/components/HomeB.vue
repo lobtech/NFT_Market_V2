@@ -1,44 +1,38 @@
 <template>
-    <div class="relative home">
+    <div class="relative homeB">
+        <loading :show="loadingShow"></loading>
         <div class="left-menu">
             <div class="user" v-if="!accounts">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
                 <div class="connected">
-                    <div class="truncate connected-btn" @click="login"></div>
+                    <div class="truncate connected-btn" @click="login()">Connected</div>
                 </div>
             </div>
             <div v-else class="wallet">
                 <div class="wallet-content">
-                    <div class="title">
-                        <img src="@/assets/image/logo.png" alt="" />
-                        <div class="truncate username">{{ username }}</div>
-                        <div>,Welcome to us !</div>
+                    <div class="item">
+                        <div>20</div>
+                        <div>BNB</div>
                     </div>
-                    <div class="row">
-                        <div>通用币：</div>
-                        <div>20 BNB</div>
+                    <div class="item">
+                        <div>2684</div>
+                        <div>LBTT</div>
                     </div>
-                    <div class="row">
-                        <div>商城币：</div>
-                        <div>2684 LBTT</div>
-                    </div>
-                    <div class="disconnect">
-                        <div class="disconnect-btn" @click="logout">Disconnect</div>
-                    </div>
+                    <div class="disconnect" @click="logout">Disconnect</div>
                 </div>
             </div>
             <div class="span"></div>
             <div class="content">
-                <div class="item" v-for="(item, index) in marketplace_list" :key="index">
-                    <img :src="item.icon" alt="" />
+                <div class="item" :class="[{ 'item-active': IsActive(item.name, title) }]" v-for="(item, index) in marketplace_list" :key="index" @click="selectMenuItem(item.name)">
+                    <img :src="IsActive(item.name, title) ? item.icon_active : item.icon" alt="" />
                 </div>
                 <div class="span-sm"></div>
-                <div class="item" v-for="(item, index) in prediction_list" :key="index">
-                    <img :src="item.icon" alt="" />
+                <div class="item" :class="[{ 'item-active': IsActive(item.name, title) }]" v-for="(item, index) in prediction_list" :key="index" @click="selectMenuItem(item.name)">
+                    <img :src="IsActive(item.name, title) ? item.icon_active : item.icon" alt="" />
                 </div>
                 <div class="span-sm"></div>
-                <div class="item" v-for="(item, index) in other_list" :key="index">
-                    <img :src="item.icon" alt="" />
+                <div class="item" :class="[{ 'item-active': IsActive(item.name, title) }]" v-for="(item, index) in other_list" :key="index" @click="selectMenuItem(item.name)">
+                    <img :src="IsActive(item.name, title) ? item.icon_active : item.icon" alt="" />
                 </div>
             </div>
             <div class="span"></div>
@@ -67,31 +61,43 @@
                 </div>
             </div>
         </div>
+        <div class="right-content">
+            <div class="title">{{ title }} {{ loadingShow }}</div>
+            <div class="switch">
+                <div class="switch-item"></div>
+            </div>
+            <div style="margin-top: 30px"></div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getNFTs">getNFTs</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getNFTOwners('0x46700948aC4B23EdbeCb49513946af519d5602Fa')">getNFTOwners</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getAllTokenIds('0x46700948aC4B23EdbeCb49513946af519d5602Fa')">getAllTokenIds</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.transfer()">transfer</div>
+            <div style="margin-top: 30px"></div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getContract('GameItems')">getContract</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.setApprovalForAll('GameItems', '0x1be539C65482A6DC6B8422544171cc7EE6b22fD1')">setApprovalForAll</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getBalance()">getBalance</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getAccounts()">getAccounts</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.call()">call</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.send()">send</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.addListing()">addListing</div>
+            <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.purchase()">purchase</div>
+            <div style="margin-top: 30px"></div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
-import { computed, readonly, ref, provide, inject } from 'vue'
+import loading from '@/components/loading/loading.vue'
+import { computed, readonly, ref, provide, inject, onMounted } from 'vue'
 import store from '@/store'
-
-const menuItemValue: any = inject('title') // 菜单标题
-const setTitle: any = inject('setTitle') // 设置菜单
-const setLoading: any = inject('setLoading') // 设置loading
-const login: any = inject('login') // 登录
-const logout: any = inject('logout') // 注销
-const toPage: any = inject('toPage') // 跳转到新页面
-const IsActive: any = inject('IsActive') // 是否激活
-const changeShow: any = inject('changeShow') // 是否显示
-const selectMenuItem: any = inject('selectMenuItem') // 设置子菜单
-const marketplace_list: any = inject('marketplace_list') // 菜单列表
-const prediction_list: any = inject('prediction_list') // 菜单列表
-const other_list: any = inject('other_list') // 菜单列表
-
+import web3 from '@/tools/moralis'
+import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
+// import { loadingShow, setLoading, title, setTitle } from '../js/right'
 const accounts = computed(() => store.state.moralis?.user.accounts)
 const username = computed(() => store.state.moralis?.user.username)
+login(false)
 </script>
 
 <style lang="less" scoped>
-.home {
+.homeB {
     background-image: url('@/assets/image/bg_blurEffect.png');
     background-size: cover;
     background-position: center;
@@ -102,8 +108,8 @@ const username = computed(() => store.state.moralis?.user.username)
     display: flex;
     .left-menu {
         height: 100%;
-        width: 160px;
-        max-width: 160px;
+        width: 80px;
+        max-width: 240px;
         padding: 10px;
         background-color: rgba(0, 0, 0, 0.6);
         border-radius: 12px;
@@ -112,8 +118,10 @@ const username = computed(() => store.state.moralis?.user.username)
         flex-direction: column;
         align-items: center;
         transition: all 230ms ease-out;
+        overflow: hidden;
         .user {
             width: 100%;
+            max-width: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -122,31 +130,29 @@ const username = computed(() => store.state.moralis?.user.username)
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
                 img {
                     width: 100%;
-                    max-width: 110px;
                     cursor: pointer;
                 }
             }
             .connected {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 10px;
                 .connected-btn {
-                    padding: 10px 16px;
+                    height: 16px;
+                    max-height: 44px;
+                    width: 60px;
+                    max-width: 200px;
+                    padding: 12px 20px;
                     border-radius: 14px;
                     background-color: #7092c0;
                     color: rgba(255, 255, 255, 0.8);
-                    font-size: 14px;
+                    font-size: 1.5vw;
                     cursor: pointer;
                     text-align: center;
                     overflow: hidden;
                     transition: all 230ms ease-out;
-                    &:before {
-                        content: 'Connected';
-                    }
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     &:hover {
                         transition: all 230ms ease-out;
                         background-color: #2d5791;
@@ -165,54 +171,42 @@ const username = computed(() => store.state.moralis?.user.username)
 
         .wallet {
             padding: 10px;
+            width: 100%;
             overflow: hidden;
             .wallet-content {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                .title {
-                    padding: 10px;
-                    height: 80px;
+                align-items: center;
+                .item {
+                    padding: 10px 20px;
                     display: flex;
                     align-items: center;
+                    flex-direction: column;
                     color: rgba(255, 255, 255, 0.5);
-                    img {
-                        width: 40px;
-                        margin-right: 10px;
+                    justify-content: space-between;
+                    div {
+                        padding: 4px;
                     }
-                    .username {
-                        width: 60px;
-                    }
-                }
-                .row {
-                    padding-left: 60px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    color: rgba(255, 255, 255, 0.5);
                 }
                 .disconnect {
-                    width: 100%;
-                    height: 60px;
+                    margin-top: 10px;
+                    height: 16px;
+                    max-height: 44px;
+                    width: 60px;
+                    max-width: 200px;
+                    padding: 12px 20px;
+                    border-radius: 20px;
+                    background-color: rgba(173, 0, 0, 0.5);
+                    color: rgba(255, 255, 255, 0.5);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 14px;
-                    .disconnect-btn {
-                        width: 120px;
-                        height: 30px;
-                        border-radius: 20px;
-                        background-color: rgba(173, 0, 0, 0.5);
+                    cursor: pointer;
+                    transition: all 230ms ease-out;
+                    &:hover {
+                        background-color: rgba(173, 0, 0, 1);
                         color: rgba(255, 255, 255, 0.5);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: pointer;
-                        transition: all 230ms ease-out;
-                        &:hover {
-                            background-color: rgba(173, 0, 0, 1);
-                            color: rgba(255, 255, 255, 0.5);
-                        }
                     }
                 }
             }
@@ -228,18 +222,30 @@ const username = computed(() => store.state.moralis?.user.username)
             align-items: center;
             overflow: auto;
             .item {
-                padding: 5px 20px;
+                padding: 10px 20px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 100%;
+                min-width: 48px;
+                width: 40px;
+                max-width: 100px;
+                opacity: 0.5;
+                transition: all 230ms ease-out;
+                cursor: pointer;
                 img {
-                    max-height: 60px;
+                    width: 100%;
                 }
+                &:hover {
+                    transform: scale(1.1);
+                    opacity: 1;
+                }
+            }
+            .item-active {
+                opacity: 1;
             }
             .span-sm {
                 margin: 10px 0;
-                width: 20%;
+                width: 10%;
                 height: 1px;
                 min-height: 1px;
                 background-color: rgba(255, 255, 255, 0.1);
@@ -250,36 +256,35 @@ const username = computed(() => store.state.moralis?.user.username)
             font-size: 14px;
             width: 100%;
             overflow: hidden;
+            padding: 10px 0;
             .row {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 height: 20px;
-                max-height: 40px;
+                max-height: 50px;
                 width: 100%;
-
                 .item {
-                    width: 100%;
                     padding: 0 10px;
                     cursor: pointer;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    &:hover {
-                        color: rgba(255, 255, 255, 1);
-                        img {
-                            opacity: 1;
-                        }
-                    }
+                    font-size: 1.5vmin;
+                    opacity: 0.5;
+                    transition: all 230ms ease-out;
+                    color: rgba(255, 255, 255, 1);
                     img {
-                        width: 100%;
-                        max-width: 80px;
-                        opacity: 0.5;
-                        transition: all 230ms ease-out;
+                        min-width: 20px;
+                        width: 80%;
+                        max-width: 30px;
+                    }
+                    &:hover {
+                        opacity: 1;
                     }
                 }
                 .item-active {
-                    color: rgba(255, 255, 255, 1);
+                    opacity: 1;
                 }
             }
         }
@@ -292,8 +297,9 @@ const username = computed(() => store.state.moralis?.user.username)
 
         /* 滚动槽（轨道）宽高 */
         ::-webkit-scrollbar {
-            width: 0; /*对垂直流动条有效*/
-            height: 20px; /*对水平流动条有效*/
+            width: 2px; /*对垂直流动条有效*/
+            max-width: 2px;
+            height: 0; /*对水平流动条有效*/
         }
         /* 滚动槽（轨道）样式 */
         ::-webkit-scrollbar-track {
@@ -305,6 +311,29 @@ const username = computed(() => store.state.moralis?.user.username)
         ::-webkit-scrollbar-thumb {
             border-radius: 5px;
             background-color: #7092c0;
+        }
+    }
+    .right-content {
+        flex: 1;
+        margin-left: 20px;
+        height: 100%;
+        background-color: rgba(36, 39, 54, 1);
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        .title {
+            font-size: 40px;
+            height: 30px;
+            max-height: 80px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .switch {
+            width: 100px;
+            .switch-item {
+            }
         }
     }
 }

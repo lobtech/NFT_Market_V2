@@ -89,10 +89,8 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch } from 'vue'
 // import loading from '@/components/loading/loading.vue'
-// @ts-ignore 忽略检测
 import Moralis from 'moralis/dist/moralis.min.js'
 import store from '../../../store'
-import { relative, resolve } from 'path/posix'
 
 const title = inject('title') as any // 父级菜单标题
 // 监听title来请求新的数据

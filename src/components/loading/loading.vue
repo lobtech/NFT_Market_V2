@@ -31,7 +31,7 @@ const Style: any = computed(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .mask {
     position: absolute;
     left: 0;
@@ -47,9 +47,11 @@ const Style: any = computed(() => {
     transition: all 230ms ease-out;
     opacity: 0;
     .spinner {
-        margin: 100px auto;
+        margin: 40px auto;
         width: 100px;
+        max-width: 200px;
         height: 60px;
+        max-height: 60px;
         text-align: center;
         font-size: 10px;
     }
@@ -58,6 +60,7 @@ const Style: any = computed(() => {
         background-color: #2d5791;
         height: 100%;
         width: 10px;
+        max-width: 10px;
         display: inline-block;
         margin: 0 2px;
         -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
