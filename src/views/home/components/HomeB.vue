@@ -92,7 +92,6 @@
 </template>
 <script setup lang="ts">
 import loading from '@/components/loading/loading.vue'
-import web3 from '@/tools/moralis'
 
 // 引入公共变量
 import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
@@ -105,7 +104,6 @@ import { selectState, selectClass, selectRarity } from '../js/right'
 // 引入公共计算属性
 import { IsActive, Accounts, Username } from '../js/left'
 import { Metadata } from '../js/right'
-login(false)
 </script>
 
 <style lang="less" scoped>

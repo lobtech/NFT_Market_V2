@@ -15,16 +15,19 @@ const toPage = (): void => {
 
 // 登录
 const login = async (show: boolean = true) => {
-    let user = await web3.currentAsync()
+    let user = await web3.currentAsync() // 获取已登录的用户信息
+    // 静默登录
     if (show) {
         setLoading(true)
-        // console.log(`---------->未登录:user`, user)
         user = await web3.authenticate()
         setLoading(false)
     }
-    // console.log(`---------->日志输出:user`, user)
+    let _user = (window as any).ethereum.selectedAddress // 判断是否已登录钱包
+    if (!_user) return
     if (user) {
-        store.dispatch('moralis/init', user.attributes)
+        // console.log(`---------->日志输出:user`, user)
+        await web3.enableWeb3() // 创建web3实例
+        await store.dispatch('moralis/init', user.attributes)
     }
 }
 
@@ -97,8 +100,8 @@ const setTitle = (value: string) => {
 
 // 选择菜单
 const selectMenuItem: any = async (index: string) => {
-    console.log(`---------->日志输出:index`, index)
-    if (index === 'My Items' && !store.state.moralis?.user.accounts) {
+    // console.log(`---------->日志输出:index`, index)
+    if (index === 'My Items' && !store.state.moralis?.user.accounts[0]) {
         await login()
     }
     await getData(index)
@@ -119,7 +122,7 @@ const IsActive = computed(() => {
 })
 
 // 用户唯一标识
-const Accounts = computed(() => store.state.moralis?.user.accounts)
+const Accounts = computed(() => store.state.moralis?.user.accounts[0])
 
 // 显示的用户名
 const Username = computed(() => {

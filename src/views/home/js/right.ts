@@ -49,15 +49,12 @@ const _list = [
 const list: any = ref([])
 // 获取数据
 const getData = async (type: string = title.value) => {
-    // console.log(`---------->日志输出:type`, type)
-    const chain = store.state.moralis?.chain
-    const address = store.state.moralis?.address
     loadingShow2.value = true
     switch (type) {
         // 超市数据
         case 'Market':
             {
-                const res = await web3.Moralis.Web3API.token.getNFTOwners({ chain, address })
+                const res = await web3.getNFTOwners('0xE81C077d2258A08869622f984733B0aF8843fD2c')
                 // list.value = res.result
                 list.value = _list
             }

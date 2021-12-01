@@ -5,11 +5,11 @@
         <div class="btn" @click="web3.authenticate">authenticate</div>
         <div class="btn" @click="web3.getAllTokenIds('0xE81C077d2258A08869622f984733B0aF8843fD2c')">getAllTokenIds</div>
         <div class="btn" @click="web3.call">call</div>
+        <div class="btn" @click="web3.transfer">transfer</div>
     </div>
 </template>
 <script setup lang="ts">
 import web3 from '@/tools/moralis'
-web3.start()
 </script>
 <style>
 .btn {

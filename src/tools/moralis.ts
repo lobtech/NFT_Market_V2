@@ -1,10 +1,11 @@
 import store from '@/store'
 import contracts from '@/tools/contracts'
+
 // import Web3 from 'web3/dist/web3.min.js'
 // import Moralis from 'moralis/dist/moralis.min.js'
+
 const Moralis = (window as any).Moralis // 引用全局的Moralis
 const Web3 = (window as any).Web3 // 引用全局的web3
-
 const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
 const isTest = true // 测试环境
 // 正式网
@@ -78,10 +79,16 @@ const callCloud = async () => {
 const logOut = () => {
     return Moralis.User.logOut()
 }
-// 请求授权
-const authenticate = () => {
-    return Moralis.authenticate()
+// 创建web3实例
+const enableWeb3 = async () => {
+    return Moralis.enableWeb3()
 }
+// 请求授权
+const authenticate = async () => {
+    return Moralis.authenticate({ chain })
+    // return Moralis.authenticate({ provider: 'walletconnect', chainId: 56 })
+}
+
 // 查询是否已授权
 const currentAsync = async () => {
     return Moralis.User.currentAsync()
@@ -89,7 +96,7 @@ const currentAsync = async () => {
 // 连接服务器
 const start = async (_serverUrl: string = serverUrl, _appId: string = appId) => {
     const options = { serverUrl: _serverUrl, appId: _appId }
-    Moralis.start(options) // 连接到服务器
+    await Moralis.start(options) // 连接到服务器
 }
 
 // 发送一个合约函数请求
@@ -116,9 +123,10 @@ const send = () => {
 }
 // 调用一个合约的函数
 const call = async () => {
-    const { abi, address } = contracts['test2']
+    const { abi, address } = contracts['test']
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    const res = await contract.methods.balanceOf('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
+    const res = await contract.methods.test().call()
+    // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
     console.log(`---------->日志输出:call_test`, res)
 }
 // 上架
@@ -191,6 +199,15 @@ const getContract = async (contractName: string = 'test') => {
     const contract = new web3.eth.Contract(abi, address) // 创建合约
     console.log(`---------->日志输出:contract`, contract)
 }
+// 请求授权
+const login = async () => {
+    const ethereum = (window as any).ethereum // 获取小狐狸实例
+    if (typeof ethereum.isMetaMask === 'undefined') {
+        alert('看起来您需要一个 Dapp 浏览器才能开始使用。')
+        alert('请安装 MetaMask！')
+    }
+    return ethereum.request({ method: 'eth_requestAccounts' })
+}
 export default {
     transfer,
     getNFTs,
@@ -200,6 +217,7 @@ export default {
     getNativeBalance,
     callCloud,
     logOut,
+    enableWeb3,
     authenticate,
     currentAsync,
     start,
@@ -213,4 +231,5 @@ export default {
     getBalance,
     setApprovalForAll,
     getContract,
+    login,
 }
