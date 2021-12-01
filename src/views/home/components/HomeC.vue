@@ -95,6 +95,7 @@
                 </div>
             </div>
             <div class="list">
+                <div class="list-none" v-if="list.length === 0">IS NULL</div>
                 <div class="list-item" v-for="(item, index) in list" :key="index">
                     <div class="list-item-card">
                         <div class="img" :style="[{ 'background-image': `url( ${Metadata(item.metadata, 'image')} )` }]"></div>
@@ -451,6 +452,15 @@ login(false)
             justify-content: flex-start;
             align-content: flex-start;
             overflow-y: auto;
+            .list-none {
+                font-size: 20px;
+                color: rgba(255, 255, 255, 0.2);
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
             .list-item {
                 width: 17vw;
                 height: 22vw;
@@ -479,6 +489,7 @@ login(false)
                         background-repeat: no-repeat;
                     }
                     .content {
+                        border-top: 1px solid rgba(255, 255, 255, 0.1);
                         height: 40%;
                         padding: 10px;
                         display: flex;

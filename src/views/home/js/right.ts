@@ -30,6 +30,21 @@ const selectRarity = (index: string): void => {
     rarity.value = index
     getData()
 }
+const _list = [
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/a.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/b.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/c.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/d.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/e.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/f.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/g.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/h.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/i.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/j.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/k.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/l.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+    { metadata: '{\r\n    "image": "https://pryun.vip/image/tackle/m.png",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' },
+]
 // 数据列表
 const list: any = ref([])
 // 获取数据
@@ -43,7 +58,8 @@ const getData = async (type: string = title.value) => {
         case 'Market':
             {
                 const res = await web3.Moralis.Web3API.token.getNFTOwners({ chain, address })
-                list.value = res.result
+                // list.value = res.result
+                list.value = _list
             }
             break
         case 'My Items':
@@ -63,7 +79,7 @@ const getData = async (type: string = title.value) => {
                     setTimeout(() => {
                         list.value = []
                         for (let i = 0; i <= 6; i++) {
-                            list.value.push({ metadata: '{\r\n    "image": "https://av6uwrkea2v6.usemoralis.com/Cabin.jpg",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' })
+                            list.value.push(_list[i])
                         }
                         resolve()
                     }, 500)
@@ -76,15 +92,15 @@ const getData = async (type: string = title.value) => {
                     setTimeout(() => {
                         list.value = []
                         for (let i = 0; i <= Math.floor(Math.random() * 10); i++) {
-                            list.value.push({
-                                metadata: '{\r\n    "image": "https://tse4-mm.cn.bing.net/th/id/OIP-C.np2Uw9jFr4MQLzQiKaIoDgHaEo?w=250&h=180&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
-                            })
-                            list.value.push({
-                                metadata: '{\r\n    "image": "https://tse1-mm.cn.bing.net/th/id/OIP-C.tuhUwdgN8BLkrmI0oCgbTgHaEK?w=285&h=180&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
-                            })
-                            list.value.push({
-                                metadata: '{\r\n    "image": "https://tse2-mm.cn.bing.net/th/id/OIP-C.kPwlUKUdZRn9mNa7PHbm3QHaEK?w=326&h=183&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
-                            })
+                            // list.value.push({
+                            //     metadata: '{\r\n    "image": "https://tse4-mm.cn.bing.net/th/id/OIP-C.np2Uw9jFr4MQLzQiKaIoDgHaEo?w=250&h=180&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
+                            // })
+                            // list.value.push({
+                            //     metadata: '{\r\n    "image": "https://tse1-mm.cn.bing.net/th/id/OIP-C.tuhUwdgN8BLkrmI0oCgbTgHaEK?w=285&h=180&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
+                            // })
+                            // list.value.push({
+                            //     metadata: '{\r\n    "image": "https://tse2-mm.cn.bing.net/th/id/OIP-C.kPwlUKUdZRn9mNa7PHbm3QHaEK?w=326&h=183&c=7&r=0&o=5&pid=1.7",\r\n    "description": "Ordinary cabin",\r\n    "name": "B&B",\r\n    "external_url": "https://hbeasts.com"\r\n}',
+                            // })
                         }
                         resolve()
                     }, 1000)
@@ -96,7 +112,7 @@ const getData = async (type: string = title.value) => {
     loadingShow2.value = false
 }
 setTimeout(() => {
-    getData('Houses')
+    getData('Market')
 }, 0)
 
 // Metadata
