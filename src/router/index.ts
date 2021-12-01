@@ -14,6 +14,16 @@ const routes = [
             transition: 'slide-right',
         },
     },
+    {
+        name: 'other',
+        path: '/other',
+        component: () => import('../views/other/index.vue'),
+        meta: {
+            keepAlive: true,
+            showFooter: true,
+            transition: 'slide-right',
+        },
+    },
 ]
 
 const router = createRouter({

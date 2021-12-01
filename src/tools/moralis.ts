@@ -6,9 +6,15 @@ const Moralis = (window as any).Moralis // 引用全局的Moralis
 const Web3 = (window as any).Web3 // 引用全局的web3
 
 const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
-const chain = 'bsc testnet' as string // 区块链名
-const serverUrl = 'https://iryujqeq3c0k.usemoralis.com:2053/server' as string // 服务器地址
-const appId = 'pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU' as string // appid
+const chain = 'avalanche' as string // 区块链名
+// const chain = 'bsc testnet' as string // 区块链名
+// const serverUrl = 'https://iryujqeq3c0k.usemoralis.com:2053/server' as string // 服务器地址
+// const appId = 'pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU' as string // appid
+
+const serverUrl = 'https://av6uwrkea2v6.usemoralis.com:2053/server'
+// const serverUrl = "https://iryujqeq3c0k.usemoralis.com:2053/server";
+const appId = 'KRhsgl0BHaod6RoqUz0m2aIILRYjSvmQzg1idYa9'
+// const appId = "pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU";
 
 // 转移资产
 const transfer = async () => {
@@ -105,6 +111,13 @@ const send = () => {
             console.log(`---------->日志输出:err`, err)
         })
 }
+// 调用一个合约的函数
+const call = async () => {
+    const { abi, address } = contracts['test2']
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    const res = await contract.methods.balanceOf('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
+    console.log(`---------->日志输出:call_test`, res)
+}
 // 上架
 const purchase = () => {
     const { abi, address } = contracts['nftTreader']
@@ -148,13 +161,6 @@ const addListing = () => {
         .on('error', (err: any) => {
             console.log(`---------->日志输出:err`, err)
         })
-}
-// 调用一个合约的函数
-const call = async () => {
-    const { abi, address } = contracts['test']
-    const contract = new web3.eth.Contract(abi, address) // 创建合约
-    const res = await contract.methods.test().call()
-    console.log(`---------->日志输出:call_test`, res)
 }
 // 账户列表
 const getAccounts = async () => {

@@ -104,7 +104,7 @@
                                 <div style="color: rgba(255, 255, 255, 1); font-size: 16px">0.8800TNT</div>
                             </div>
                             <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ Metadata(item.metadata, 'description') }}</div>
-                            <div class="row">
+                            <div class="row" style="color: #7092c0; opacity: 0.7">
                                 <div>Feng</div>
                                 <div>shuil</div>
                                 <div style="color: azure">200</div>
@@ -465,6 +465,12 @@ login(false)
                     background-color: #282b3a;
                     border: 1px solid rgba(255, 255, 255, 0.1);
                     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+                    cursor: pointer;
+                    transition: all 230ms ease-in-out;
+                    border-radius: 2px;
+                    &:hover {
+                        transform: scale(1.05);
+                    }
                     .img {
                         height: 60%;
                         width: 100%;
