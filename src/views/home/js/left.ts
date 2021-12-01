@@ -1,7 +1,7 @@
 import store from '@/store'
 import web3 from '@/tools/moralis'
 import { computed, readonly, ref } from 'vue'
-
+import { getData } from '../js/right'
 // 首屏加载
 const loadingShow = ref(false) // 加载状态
 const setLoading = (value: boolean) => {
@@ -101,6 +101,7 @@ const selectMenuItem: any = async (index: string) => {
     if (index === 'My Items' && !store.state.moralis?.user.accounts) {
         await login()
     }
+    await getData(index)
     setTitle(index)
 }
 

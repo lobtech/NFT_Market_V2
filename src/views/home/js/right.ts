@@ -3,10 +3,10 @@ import web3 from '@/tools/moralis'
 import { computed, readonly, ref, provide } from 'vue'
 import { title, setTitle } from '../js/left'
 
-// 首屏加载
-const loadingShow = ref(false) // 加载状态
+// 加载
+const loadingShow2 = ref(false) // 加载状态
 const setLoading = (value: boolean) => {
-    loadingShow.value = value
+    loadingShow2.value = value
 }
 
 // 选择state
@@ -37,7 +37,7 @@ const getData = async (type: string = title.value) => {
     // console.log(`---------->日志输出:type`, type)
     const chain = store.state.moralis?.chain
     const address = store.state.moralis?.address
-    loadingShow.value = true
+    loadingShow2.value = true
     switch (type) {
         // 超市数据
         case 'Market':
@@ -62,7 +62,7 @@ const getData = async (type: string = title.value) => {
                 await new Promise((resolve: any) => {
                     setTimeout(() => {
                         list.value = []
-                        for (let i = 0; i <= 10; i++) {
+                        for (let i = 0; i <= 6; i++) {
                             list.value.push({ metadata: '{\r\n    "image": "https://av6uwrkea2v6.usemoralis.com/Cabin.jpg",\r\n    "description": "Ordinary cabin",\r\n    "name": "Cabin",\r\n    "external_url": "https://hbeasts.com"\r\n}' })
                         }
                         resolve()
@@ -93,7 +93,7 @@ const getData = async (type: string = title.value) => {
             break
     }
     // console.log(`---------->日志输出:list.value`, list.value)
-    loadingShow.value = false
+    loadingShow2.value = false
 }
 setTimeout(() => {
     getData('Houses')
@@ -109,5 +109,11 @@ const Metadata = computed(() => {
     }
 })
 
-export { state_list, state, class_list, _class, rarity_list, rarity }
-export { selectState, selectClass, selectRarity }
+// 导出公共变量
+export { state_list, state, class_list, _class, rarity_list, rarity, list, loadingShow2 }
+
+// 导出公共方法
+export { selectState, selectClass, selectRarity, getData }
+
+// 导出公共计算属性
+export { Metadata }

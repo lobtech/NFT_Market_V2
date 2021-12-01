@@ -78,15 +78,54 @@
                 </div>
             </div>
         </div>
-        <div class="right-content"></div>
+        <div class="right-content">
+            <loading :show="loadingShow2"></loading>
+            <div class="title">{{ title }}</div>
+            <div class="switch">
+                <div class="switch-item" :class="[{ 'switch-item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
+            </div>
+            <div class="odds">
+                <div class="odds-row">
+                    <div class="row-title">Class：</div>
+                    <div class="row-item" :class="[{ 'row-item-active': IsActive(item, _class) }]" v-for="(item, index) in class_list" :key="index" @click="selectClass(item)">{{ item }}</div>
+                </div>
+                <div class="odds-row">
+                    <div class="row-title">Rarity：</div>
+                    <div class="row-item" :class="[{ 'row-item-active': IsActive(item, rarity) }]" v-for="(item, index) in rarity_list" :key="index" @click="selectRarity(item)">{{ item }}</div>
+                </div>
+            </div>
+            <div class="list">
+                <div class="list-item" v-for="(item, index) in list" :key="index">
+                    <div class="list-item-card">
+                        <div class="img" :style="[{ 'background-image': `url( ${Metadata(item.metadata, 'image')} )` }]"></div>
+                        <div class="content">
+                            <div class="row">
+                                <div>{{ Metadata(item.metadata, 'name') }}.V10</div>
+                                <div style="color: rgba(255, 255, 255, 1); font-size: 16px">0.8800TNT</div>
+                            </div>
+                            <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ Metadata(item.metadata, 'description') }}</div>
+                            <div class="row">
+                                <div>Feng</div>
+                                <div>shuil</div>
+                                <div style="color: azure">200</div>
+                                <div>|</div>
+                                <div>Magic</div>
+                                <div>188</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
 import loading from '@/components/loading/loading.vue'
+import web3 from '@/tools/moralis'
 
 // 引入公共变量
 import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
-import { state_list, state, class_list, _class, rarity_list, rarity } from '../js/right'
+import { state_list, state, class_list, _class, rarity_list, rarity, list, loadingShow2 } from '../js/right'
 
 // 引入公共方法
 import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
@@ -94,6 +133,8 @@ import { selectState, selectClass, selectRarity } from '../js/right'
 
 // 引入公共计算属性
 import { IsActive, Accounts, Username } from '../js/left'
+import { Metadata } from '../js/right'
+login(false)
 </script>
 
 <style lang="less" scoped>
@@ -318,12 +359,158 @@ import { IsActive, Accounts, Username } from '../js/left'
         }
     }
     .right-content {
+        position: relative;
         flex: 1;
         margin-left: 20px;
         height: 100%;
         background-color: rgba(36, 39, 54, 1);
         border-radius: 12px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            margin-top: 10px;
+            font-size: 36px;
+            max-height: 80px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #7092c0;
+            margin: 10px 0 10px 10px;
+            border-radius: 16px;
+            padding: 6px 0;
+            max-width: 240px;
+            .switch-item {
+                color: rgba(255, 255, 255, 0.5);
+                margin: 0 10px;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 16px;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 230ms ease-out;
+                border: 1px solid rgba(255, 255, 255, 0);
+                &:hover {
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+            .switch-item-active {
+                background-color: #2d5791;
+                color: rgba(255, 255, 255, 1);
+            }
+        }
+        .odds {
+            margin-top: 20px;
+            padding: 0 10px;
+            color: rgba(255, 255, 255, 0.5);
+            .odds-row {
+                margin-top: 10px;
+                display: flex;
+                align-items: center;
+                .row-title {
+                    font-size: 20px;
+                    line-height: 1;
+                }
+                .row-item {
+                    font-size: 14px;
+                    padding: 8px 16px;
+                    border: 1px solid rgba(255, 255, 255, 0.5);
+                    border-radius: 14px;
+                    margin-left: 8px;
+                    transition: all 230ms ease-in-out;
+                    cursor: pointer;
+                    &:hover {
+                        color: rgba(255, 255, 255, 1);
+                    }
+                }
+                .row-item-active {
+                    color: rgba(255, 255, 255, 1);
+                    border: 1px solid #7092c0;
+                    background-color: #7092c0;
+                }
+            }
+        }
+        .list {
+            margin: 10px 0;
+            flex: 1;
+            height: 0;
+            padding: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-content: flex-start;
+            overflow-y: auto;
+            .list-item {
+                width: 17vw;
+                height: 22vw;
+                min-width: 160px;
+                min-height: 210px;
+                max-width: 220px;
+                max-height: 280px;
+                padding: 10px;
+                .list-item-card {
+                    height: 100%;
+                    width: 100%;
+                    background-color: #282b3a;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+                    .img {
+                        height: 60%;
+                        width: 100%;
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                    .content {
+                        height: 40%;
+                        padding: 10px;
+                        display: flex;
+                        flex-direction: column;
+
+                        .row {
+                            color: rgba(255, 255, 255, 0.5);
+                            flex: 1;
+                            font-size: 14px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            div {
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /* 滚动槽（轨道）宽高 */
+        ::-webkit-scrollbar {
+            width: 5px; /*对垂直流动条有效*/
+            max-width: 5px;
+            height: 0; /*对水平流动条有效*/
+        }
+        /* 滚动槽（轨道）样式 */
+        ::-webkit-scrollbar-track {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        /*定义滑块颜色、内阴影及圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-color: #7092c0;
+        }
     }
 }
 </style>
