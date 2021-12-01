@@ -117,5 +117,22 @@ const IsActive = computed(() => {
     }
 })
 
-export { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, IsActive, isShow }
+// 用户唯一标识
+const Accounts = computed(() => store.state.moralis?.user.accounts)
+
+// 显示的用户名
+const Username = computed(() => {
+    return function (length: number = 4) {
+        let username = store.state.moralis?.user.username as string
+        return `${username.slice(0, length)}****${username.slice(-length)}`
+    }
+})
+
+// 导出公共变量
+export { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow }
+
+// 导出公共方法
 export { setLoading, toPage, login, logout, setTitle, changeShow }
+
+// 导出公共计算属性
+export { IsActive, Accounts, Username }

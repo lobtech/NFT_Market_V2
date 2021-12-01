@@ -4,11 +4,11 @@
         <div class="left-menu">
             <div class="user">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected" v-if="!accounts" @click="login()">Connected</div>
-                <div class="connected connected-close" v-else @click="logout()">{{ username }}</div>
+                <div class="connected" v-if="!Accounts" @click="login()">Connected</div>
+                <div class="connected connected-close" v-else @click="logout()">{{ Username(4) }}</div>
             </div>
             <div class="span"></div>
-            <div class="content">
+            <div class="menu-list">
                 <div class="item" :class="[{ 'item-active': IsActive(item.name, title) }]" v-for="(item, index) in marketplace_list" :key="index" @click="selectMenuItem(item.name)">
                     <img :src="IsActive(item.name, title) ? item.icon_active : item.icon" alt="" />
                 </div>
@@ -50,7 +50,7 @@
         <div class="right-content">
             <div class="title">{{ title }} {{ loadingShow }}</div>
             <div class="switch">
-                <div class="switch-item"></div>
+                <div class="switch-item" :class="[{ 'switch-item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
             </div>
             <div style="margin-top: 30px"></div>
             <div style="color: rgba(255, 255, 255, 0.7); padding: 10px 20px" @click="web3.getNFTs">getNFTs</div>
@@ -72,16 +72,18 @@
 </template>
 <script setup lang="ts">
 import loading from '@/components/loading/loading.vue'
-import { computed, readonly, ref, provide, inject, onMounted } from 'vue'
-import store from '@/store'
 import web3 from '@/tools/moralis'
-import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
-// import { loadingShow, setLoading, title, setTitle } from '../js/right'
-const accounts = computed(() => store.state.moralis?.user.accounts)
-const username = computed(() => {
-    let username = store.state.moralis?.user.username as string
-    return `${username.slice(0, 4)}****${username.slice(-4)}`
-})
+
+// 引入公共变量
+import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
+import { state_list, state, class_list, _class, rarity_list, rarity } from '../js/right'
+
+// 引入公共方法
+import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
+import { selectState, selectClass, selectRarity } from '../js/right'
+
+// 引入公共计算属性
+import { IsActive, Accounts, Username } from '../js/left'
 login(false)
 </script>
 
@@ -93,7 +95,6 @@ login(false)
     background-position: center;
     background-repeat: no-repeat;
     padding: 20px;
-    overflow: auto;
     height: 100%;
     display: flex;
     .left-menu {
@@ -108,7 +109,6 @@ login(false)
         flex-direction: column;
         align-items: center;
         transition: all 230ms ease-out;
-        overflow: hidden;
         .user {
             width: 100%;
             max-width: 180px;
@@ -156,8 +156,7 @@ login(false)
                 }
             }
         }
-
-        .content {
+        .menu-list {
             width: 100%;
             flex: 1;
             height: 0;
@@ -165,8 +164,11 @@ login(false)
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: auto;
+            overflow-x: visible;
+            overflow-y: auto;
+
             .item {
+                position: relative;
                 padding: 10px 20px;
                 display: flex;
                 justify-content: center;
@@ -196,6 +198,7 @@ login(false)
                 background-color: rgba(255, 255, 255, 0.1);
             }
         }
+
         .other {
             color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
@@ -276,8 +279,34 @@ login(false)
             color: rgba(255, 255, 255, 0.5);
         }
         .switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #7092c0;
+            margin: 10px;
+            border-radius: 20px;
+            padding: 10px 0;
             width: 100px;
             .switch-item {
+                color: rgba(255, 255, 255, 0.5);
+                margin: 0 10px;
+                border-radius: 20px;
+                padding: 10px;
+                font-size: 1.4vw;
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 230ms ease-out;
+                &:hover {
+                    color: rgba(255, 255, 255, 1);
+                    background-color: #2d5791;
+                }
+            }
+            .switch-item-active {
+                background-color: #2d5791;
+                color: rgba(255, 255, 255, 1);
             }
         }
     }

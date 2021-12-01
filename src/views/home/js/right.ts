@@ -108,5 +108,6 @@ const Metadata = computed(() => {
         return obj[key]
     }
 })
-const test = () => setTitle('23456')
-export { test, loadingShow, setLoading, title, setTitle, web3 }
+
+export { state_list, state, class_list, _class, rarity_list, rarity }
+export { selectState, selectClass, selectRarity }

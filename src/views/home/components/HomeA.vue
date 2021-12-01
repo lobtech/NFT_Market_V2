@@ -21,9 +21,16 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, readonly, ref, provide, inject } from 'vue'
-import store from '@/store'
-import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
+// 引入公共变量
+import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
+import { state_list, state, class_list, _class, rarity_list, rarity } from '../js/right'
+
+// 引入公共方法
+import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
+import { selectState, selectClass, selectRarity } from '../js/right'
+
+// 引入公共计算属性
+import { IsActive, Accounts, Username } from '../js/left'
 </script>
 
 <style lang="less" scoped>

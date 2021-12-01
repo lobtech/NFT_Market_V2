@@ -4,11 +4,11 @@
         <div class="left-menu">
             <div class="user">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
-                <div class="connected" v-if="!accounts" @click="login()">Connected</div>
-                <div class="connected connected-close" v-else @click="logout()">{{ username }}</div>
+                <div class="connected" v-if="!Accounts" @click="login()">Connected</div>
+                <div class="connected connected-close" v-else @click="logout()">{{ Username(5) }}</div>
             </div>
             <div class="span"></div>
-            <div class="content">
+            <div class="menu-list">
                 <div class="select" :class="[{ 'select-active': IsActive('0', isShow) }]">
                     <div class="title" @click="changeShow('0')">
                         <div>NFT Marketplace</div>
@@ -83,14 +83,17 @@
 </template>
 <script setup lang="ts">
 import loading from '@/components/loading/loading.vue'
-import store from '@/store'
-import { computed, ref } from 'vue'
-import { loadingShow, setLoading, toPage, login, logout, marketplace_list, prediction_list, other_list, title, setTitle, selectMenuItem, IsActive, isShow, changeShow } from '../js/left'
-const accounts = computed(() => store.state.moralis?.user.accounts)
-const username = computed(() => {
-    let username = store.state.moralis?.user.username as string
-    return `${username.slice(0, 5)}******${username.slice(-5)}`
-})
+
+// 引入公共变量
+import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
+import { state_list, state, class_list, _class, rarity_list, rarity } from '../js/right'
+
+// 引入公共方法
+import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
+import { selectState, selectClass, selectRarity } from '../js/right'
+
+// 引入公共计算属性
+import { IsActive, Accounts, Username } from '../js/left'
 </script>
 
 <style lang="less" scoped>
@@ -167,7 +170,7 @@ const username = computed(() => {
             }
         }
 
-        .content {
+        .menu-list {
             width: 100%;
             flex: 1;
             height: 0;
@@ -178,7 +181,6 @@ const username = computed(() => {
             color: rgba(255, 255, 255, 0.8);
 
             .select {
-                // background-color: red;
                 & > .title {
                     font-size: 18px;
                     height: 60px;
