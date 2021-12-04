@@ -15,9 +15,9 @@ const routes = [
         },
     },
     {
-        name: 'other',
-        path: '/other',
-        component: () => import('../views/other/index.vue'),
+        name: 'test',
+        path: '/test',
+        component: () => import('../views/test/index.vue'),
         meta: {
             keepAlive: true,
             showFooter: true,

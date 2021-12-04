@@ -1,5 +1,5 @@
 import store from '@/store'
-import web3 from '@/tools/moralis'
+import moralis from '@/tools/moralis'
 import { computed, readonly, ref } from 'vue'
 import { getData } from '../js/right'
 // 首屏加载
@@ -15,18 +15,15 @@ const toPage = (): void => {
 
 // 登录
 const login = async (show: boolean = true) => {
-    let user = await web3.currentAsync() // 获取已登录的用户信息
+    let user = await moralis.currentAsync() // 获取已登录的用户信息
     // 静默登录
     if (show) {
         setLoading(true)
-        user = await web3.authenticate()
+        user = await moralis.authenticate()
         setLoading(false)
     }
-    let _user = (window as any).ethereum.selectedAddress // 判断是否已登录钱包
-    if (!_user) return
     if (user) {
         // console.log(`---------->日志输出:user`, user)
-        await web3.enableWeb3() // 创建web3实例
         await store.dispatch('moralis/init', user.attributes)
     }
 }
@@ -35,7 +32,7 @@ const login = async (show: boolean = true) => {
 const logout = async () => {
     setLoading(true)
     // console.log(`---------->未登录:user`, user)
-    await web3.logOut()
+    await moralis.logOut()
     store.dispatch('moralis/logout', true)
     setLoading(false)
 }

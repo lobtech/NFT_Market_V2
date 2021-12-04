@@ -1,0 +1,145 @@
+import store from '@/store'
+import contracts from '@/tools/contracts'
+const Web3 = (window as any).Web3 // 引用全局的web3 在index.html文件cdn引入<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+const Moralis = (window as any).Moralis // 引用全局的Moralis 在index.html文件cdn引入<script src="https://cdn.jsdelivr.net/npm/moralis@latest/dist/moralis.min.js"></script>
+
+// 登录钱包
+const login = async () => {
+    const ethereum = (window as any).ethereum // 获取小狐狸实例
+    if (typeof ethereum.isMetaMask === 'undefined') {
+        alert('看起来您需要一个 Dapp 浏览器才能开始使用。')
+        alert('请安装 MetaMask！')
+    }
+    return ethereum.request({ method: 'eth_requestAccounts' })
+}
+
+// 账户列表
+const getAccounts = async () => {
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const res = await web3.eth.getAccounts()
+    console.log(`---------->日志输出:getAccounts`, res)
+}
+
+// 查询余额
+const getBalance = async (address: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC') => {
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const res = await web3.eth.getBalance(address)
+    console.log(`---------->日志输出:getBalance`, res)
+}
+
+// 调用一个合约的函数
+const call = async () => {
+    const { abi, address } = contracts['test']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    const res = await contract.methods.get().call()
+    // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
+    console.log(`---------->日志输出:call_test`, res)
+}
+
+// 发送一个合约函数请求
+const send = () => {
+    const { abi, address } = contracts['bbb']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    let user = store.state.moralis?.user.accounts[0]
+    console.log(`---------->日志输出:user`, user)
+    // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
+    // 发送交易，使用事件获取返回结果
+    contract.methods
+        .distribute('0xff2b673601950a0F164B67dF6f6765366a8c1419', [{ beneficiary: user, amount: `${10 * Math.pow(10, 18)}` }])
+        // .addListing(contracts['GameItems']['address'], '1', 45)
+        .send({ from: user })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
+}
+
+// 查询合约对象
+const getContract = async (contractName: string = 'test') => {
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    console.log(`---------->日志输出:contract`, contract)
+}
+
+// 设置合约访问白名单 主合约名，新增合约地址 ，发起人
+const setApprovalForAll = async (contractName: string = 'test', contractAddress: string = '', from: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC') => {
+    if (!contractAddress || !from) {
+        console.log(`---------->日志输出:参数异常{ contractName = 'test', contractAddress = '', from = '' }`, { contractName, contractAddress, from })
+    }
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    const res = await contract.methods.setApprovalForAll(contractAddress, true).send({ from })
+    console.log(`---------->日志输出:setApprovalForAll`, res)
+}
+
+// 上架
+const addListing = () => {
+    const { abi, address } = contracts['nftTreader']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    // 发送交易，使用事件获取返回结果
+    contract.methods
+        .addListing(222, contracts['GameItems']['address'], '2')
+        // .addListing(contracts['GameItems']['address'], '1', 45)
+        .send({ from: '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC' })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
+}
+
+// 购买
+const purchase = () => {
+    const { abi, address } = contracts['nftTreader']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    // 发送交易，使用事件获取返回结果
+    contract.methods
+        .purchase(contracts['GameItems']['address'], '2', 1)
+        // .addListing(contracts['GameItems']['address'], '1', 45)
+        .send({ from: '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC' })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
+}
+
+export default {
+    login,
+    getAccounts,
+    getBalance,
+    getContract,
+    call,
+    send,
+    setApprovalForAll,
+    addListing,
+    purchase,
+}

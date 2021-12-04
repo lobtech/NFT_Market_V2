@@ -1,5 +1,6 @@
 import store from '@/store'
-import web3 from '@/tools/moralis'
+import contracts from '@/tools/contracts'
+import moralis from '@/tools/moralis'
 import { computed, readonly, ref, provide } from 'vue'
 import { title, setTitle } from '../js/left'
 
@@ -54,20 +55,17 @@ const getData = async (type: string = title.value) => {
         // 超市数据
         case 'Market':
             {
-                const res = await web3.getNFTOwners('0xE81C077d2258A08869622f984733B0aF8843fD2c')
+                const res = await moralis.getNFTOwners('0xE81C077d2258A08869622f984733B0aF8843fD2c')
                 // list.value = res.result
                 list.value = _list
             }
             break
         case 'My Items':
             {
-                const address = store.state.moralis?.user.accounts
-                const options = {
-                    chain: 'ropsten', // 区块链名（可选）
-                    address, // 指定合约地址（可选）
-                }
-                const res = await web3.Moralis.Web3API.account.getNFTs(options)
-                list.value = res.result
+                const address = store.state.moralis?.user.accounts[0] as string
+                const res: any = await moralis.getNFTs(address)
+                // console.log(`---------->日志输出:res`, res)
+                list.value = res.result || []
             }
             break
         case 'Sell':
