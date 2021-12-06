@@ -2,6 +2,7 @@
     <div style="padding: 20px; background-color: royalblue; display: flex; justify-content: center; flex-direction: column; align-items: center">
         <div class="btn" @click="web3.setApprovalForAll('bbb', contracts.bbb.address, '0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10')">setApprovalForAll</div>
         <div class="btn" @click="web3.getContract('aaa')">getContract</div>
+        <div class="btn" @click="web3.getAccounts">getAccounts</div>
         <div class="btn" @click="web3.call">call</div>
         <div class="btn" @click="web3.send">send</div>
         <div class="btn" @click="moralis.authenticate">authenticate</div>

@@ -2,6 +2,7 @@ import store from '@/store'
 import moralis from '@/tools/moralis'
 import { computed, readonly, ref } from 'vue'
 import { getData } from '../js/right'
+
 // 首屏加载
 const loadingShow = ref(false) // 加载状态
 const setLoading = (value: boolean) => {
