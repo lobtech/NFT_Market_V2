@@ -27,19 +27,17 @@ const getBalance = async (address: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B
     console.log(`---------->日志输出:getBalance`, res)
 }
 
-// 调用一个合约的函数
-const call = async () => {
-    const { abi, address } = contracts['test']
+// 查询合约对象
+const getContract = async (contractName: string = 'test') => {
+    const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    const res = await contract.methods.get().call()
-    // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
-    console.log(`---------->日志输出:call_test`, res)
+    console.log(`---------->日志输出:contract`, contract)
 }
 
-// 发送一个合约函数请求
-const send = () => {
-    const { abi, address } = contracts['bbb']
+// 授权某个合约可使用我的货币
+const approve = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', num: string = '10') => {
+    const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
     let user = store.state.moralis?.user.accounts[0]
@@ -47,8 +45,32 @@ const send = () => {
     // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
     // 发送交易，使用事件获取返回结果
     contract.methods
-        .distribute('0xff2b673601950a0F164B67dF6f6765366a8c1419', [{ beneficiary: user, amount: `${10 * Math.pow(10, 18)}` }])
-        // .addListing(contracts['GameItems']['address'], '1', 45)
+        .approve(contractAddress, `${Number(num) * Math.pow(10, 18)}`)
+        .send({ from: user })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
+}
+// 领取货币
+const distribute = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', num: string = '10') => {
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    let user = store.state.moralis?.user.accounts[0]
+    console.log(`---------->日志输出:user`, user)
+    // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
+    // 发送交易，使用事件获取返回结果
+    contract.methods
+        .distribute(contractAddress, user, `${Number(num) * Math.pow(10, 18)}`)
         .send({ from: user })
         .on('transactionHash', function (hash: any) {
             console.log(`---------->日志输出:hash`, hash)
@@ -64,12 +86,41 @@ const send = () => {
         })
 }
 
-// 查询合约对象
-const getContract = async (contractName: string = 'test') => {
-    const { abi, address } = (contracts as any)[contractName]
+// 调用一个合约的函数
+const call = async () => {
+    const { abi, address } = contracts['test']
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    console.log(`---------->日志输出:contract`, contract)
+    const res = await contract.methods.get().call()
+    // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
+    console.log(`---------->日志输出:call_test`, res)
+}
+
+// 发送一个合约函数请求
+const send = () => {
+    const { abi, address } = contracts['airdrop']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    let user = store.state.moralis?.user.accounts[0]
+    console.log(`---------->日志输出:user`, user)
+    // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
+    // 发送交易，使用事件获取返回结果
+    contract.methods
+        .distribute('0x9d027E7fDFF8d5E194449CfC1B9275584F7624CE', [{ beneficiary: user, amount: `${7 * Math.pow(10, 18)}` }])
+        // .addListing(contracts['GameItems']['address'], '1', 45)
+        .send({ from: user })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
 }
 
 // 设置合约访问白名单 主合约名，新增合约地址 ，发起人
@@ -137,9 +188,11 @@ export default {
     getAccounts,
     getBalance,
     getContract,
+    approve,
+    distribute,
+    setApprovalForAll,
     call,
     send,
-    setApprovalForAll,
     addListing,
     purchase,
 }

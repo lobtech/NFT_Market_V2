@@ -106,9 +106,6 @@ const getData = async (type: string = title.value) => {
     // console.log(`---------->日志输出:list.value`, list.value)
     loadingShow2.value = false
 }
-setTimeout(() => {
-    getData('Market')
-}, 0)
 
 // Metadata
 const Metadata = computed(() => {

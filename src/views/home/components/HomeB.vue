@@ -99,11 +99,15 @@ import { state_list, state, class_list, _class, rarity_list, rarity, list, loadi
 
 // 引入公共方法
 import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
-import { selectState, selectClass, selectRarity } from '../js/right'
+import { selectState, selectClass, selectRarity, getData } from '../js/right'
 
 // 引入公共计算属性
 import { IsActive, Accounts, Username } from '../js/left'
 import { Metadata } from '../js/right'
+
+setTimeout(() => {
+    getData('Market')
+}, 0)
 </script>
 
 <style lang="less" scoped>
