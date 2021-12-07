@@ -1,6 +1,7 @@
 import store from '@/store'
 import contracts from '@/tools/contracts'
 import moralis from '@/tools/moralis'
+import web3 from '@/tools/web3'
 import { computed, readonly, ref, provide } from 'vue'
 import { title, setTitle } from '../js/left'
 
@@ -62,7 +63,7 @@ const getData = async (type: string = title.value) => {
             break
         case 'My Items':
             {
-                const address = store.state.moralis?.user.accounts[0] as string
+                const address = store.state.moralis?.user.account as string
                 const res: any = await moralis.getNFTs(address)
                 // console.log(`---------->日志输出:res`, res)
                 list.value = res.result || []

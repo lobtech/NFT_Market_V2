@@ -37,34 +37,34 @@ const logOut = () => {
 
 // 查询本地余额
 const getNativeBalance = async (address: string) => {
-    console.log(`---------->查询本地余额:address`, address)
+    // console.log(`---------->查询本地余额:address`, address)
     const res = await Moralis.Web3API.account.getNativeBalance({ chain, address })
     // console.log(`---------->日志输出:res`, res)
 }
 
 // 查询令牌余额
 const getTokenBalances = async (address: string) => {
-    console.log(`---------->查询令牌余额:address`, address)
+    // console.log(`---------->查询令牌余额:address`, address)
     const res = await Moralis.Web3API.account.getTokenBalances({ chain, address })
     console.log(`---------->日志输出:res`, res)
 }
 
 // 获取用户资产(指定用户地址,指定区块链)
 const getNFTs = async (address: string = '', _chain: string = chain) => {
-    console.log(`---------->获取用户资产:address`, address)
+    // console.log(`---------->获取用户资产:address`, address)
     return Moralis.Web3API.account.getNFTs({ chain: _chain, address })
 }
 
 // 查询合约全部资产
 const getNFTOwners = async (address: string) => {
-    console.log(`---------->查询合约全部资产:address`, address)
+    // console.log(`---------->查询合约全部资产:address`, address)
     const res = await Moralis.Web3API.token.getNFTOwners({ chain, address })
     console.log(`---------->日志输出:res`, res)
 }
 
 //  查询合约全部资产类型
 const getAllTokenIds = async (address: string) => {
-    console.log(`---------->查询合约全部资产类型:address`, address)
+    // console.log(`---------->查询合约全部资产类型:address`, address)
     const res = await Moralis.Web3API.token.getAllTokenIds({ chain, address })
     console.log(`---------->日志输出:res`, res)
 }
@@ -88,7 +88,7 @@ const transfer = async () => {
 
 // 请求云函数
 const callCloud = async () => {
-    let user = store.state.moralis?.user.accounts[0]
+    let user = store.state.moralis?.user.account
     const params = { contractAddress: '0xff2b673601950a0F164B67dF6f6765366a8c1419', list: [{ beneficiary: user, amount: `${10 * Math.pow(10, 18)}` }] }
     const res = await Moralis.Cloud.run('test', params)
     console.log(`---------->日志输出:res`, res)

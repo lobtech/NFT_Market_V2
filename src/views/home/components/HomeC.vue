@@ -80,7 +80,19 @@
         </div>
         <div class="right-content">
             <loading :show="loadingShow2"></loading>
-            <div class="title">{{ title }}</div>
+            <div class="content-top">
+                <div class="title">{{ title }}</div>
+                <div class="balances">
+                    <div class="balances-row">
+                        <div class="num">{{ NativeBalance || '??' }}</div>
+                        <div>AVAX</div>
+                    </div>
+                    <div class="balances-row">
+                        <div class="num">{{ TokenBalances || '??' }}</div>
+                        <div>LOB</div>
+                    </div>
+                </div>
+            </div>
             <div class="switch">
                 <div class="switch-item" :class="[{ 'switch-item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
             </div>
@@ -132,7 +144,7 @@ import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/l
 import { selectState, selectClass, selectRarity } from '../js/right'
 
 // 引入公共计算属性
-import { IsActive, Accounts, Username } from '../js/left'
+import { IsActive, Accounts, NativeBalance, TokenBalances, Username } from '../js/left'
 import { Metadata } from '../js/right'
 </script>
 
@@ -369,14 +381,41 @@ import { Metadata } from '../js/right'
         display: flex;
         flex-direction: column;
 
-        .title {
-            margin-top: 10px;
-            font-size: 36px;
-            max-height: 80px;
-            padding: 10px;
+        .content-top {
             display: flex;
             align-items: center;
-            color: rgba(255, 255, 255, 0.5);
+            justify-content: space-between;
+            .title {
+                margin-top: 10px;
+                font-size: 36px;
+                max-height: 80px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .balances {
+                padding: 6px 12px;
+                background-color: #282b3a;
+                margin-right: 10px;
+                border-radius: 8px;
+                min-width: 140px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+                .balances-row {
+                    min-height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: rgba(255, 255, 255, 0.5);
+                    font-size: 12px;
+                    .num {
+                        text-decoration: underline rgba(255, 255, 255, 0.5);
+                        cursor: pointer;
+                        color: rgba(255, 255, 255, 0.7);
+                    }
+                }
+            }
         }
         .switch {
             display: flex;
@@ -460,11 +499,11 @@ import { Metadata } from '../js/right'
                 align-items: center;
             }
             .list-item {
-                width: 17vw;
+                width: 16vw;
                 height: 22vw;
                 min-width: 160px;
                 min-height: 210px;
-                max-width: 220px;
+                max-width: 218px;
                 max-height: 280px;
                 padding: 10px;
                 .list-item-card {

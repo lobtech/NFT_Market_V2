@@ -1,5 +1,6 @@
 import store from '@/store'
 import moralis from '@/tools/moralis'
+import web3 from '@/tools/web3'
 import { computed, readonly, ref } from 'vue'
 import { getData } from '../js/right'
 
@@ -14,8 +15,20 @@ const toPage = (): void => {
     window.location.href = 'http://test.pryun.vip'
 }
 
+const balances = ref(0.0) // 余额
+const tokens_balances = ref(0.0) // 代币余额
 // 登录
 const login = async (show: boolean = true) => {
+    const ethereum = (window as any).ethereum
+
+    // 首次判断matemask网络是否正确
+    const { chainId, networkVersion } = store.state.moralis as any
+
+    // 首次进入网络不正确自动注销
+    if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) {
+        return console.log(`---------->日志输出:网络不正确`, ethereum)
+    }
+
     let user = await moralis.currentAsync() // 获取已登录的用户信息
     // 静默登录
     if (show) {
@@ -24,8 +37,9 @@ const login = async (show: boolean = true) => {
         setLoading(false)
     }
     if (user) {
-        // console.log(`---------->日志输出:user`, user)
-        await store.dispatch('moralis/init', user.attributes)
+        console.log(`---------->日志输出:user`, user)
+        await store.dispatch('moralis/init', user.attributes.accounts[0])
+        await store.dispatch('moralis/get_info')
     }
 }
 
@@ -99,7 +113,7 @@ const setTitle = (value: string) => {
 // 选择菜单
 const selectMenuItem: any = async (index: string) => {
     // console.log(`---------->日志输出:index`, index)
-    if (index === 'My Items' && !store.state.moralis?.user.accounts[0]) {
+    if (index === 'My Items' && !store.state.moralis?.user.account) {
         await login()
     }
     await getData(index)
@@ -120,12 +134,18 @@ const IsActive = computed(() => {
 })
 
 // 用户唯一标识
-const Accounts = computed(() => store.state.moralis?.user.accounts[0])
+const Accounts = computed(() => store.state.moralis?.user.account)
+
+// 余额
+const NativeBalance = computed(() => store.state.moralis?.user.nativeBalance)
+
+// 令牌余额
+const TokenBalances = computed(() => store.state.moralis?.user.tokenBalances)
 
 // 显示的用户名
 const Username = computed(() => {
     return function (length: number = 4) {
-        let username = store.state.moralis?.user.username as string
+        let username = store.state.moralis?.user.account as string
         return `${username.slice(0, length)}****${username.slice(-length)}`
     }
 })
@@ -137,4 +157,4 @@ export { loadingShow, marketplace_list, prediction_list, other_list, title, sele
 export { setLoading, toPage, login, logout, setTitle, changeShow }
 
 // 导出公共计算属性
-export { IsActive, Accounts, Username }
+export { IsActive, Accounts, NativeBalance, TokenBalances, Username }

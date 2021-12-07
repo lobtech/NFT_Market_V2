@@ -1,11 +1,13 @@
+import web3 from '@/tools/web3'
 import { Module } from 'vuex'
 import { State } from '..'
 
 // 定义state类型
 const states = {
+    chainId: '0xa869', // 网络id
+    networkVersion: '1', // 网络版本
     user: {
-        accounts: [] as string[], // 用户地址
-        username: '' as string, // 用户昵称
+        account: '' as string, // 用户地址
         nativeBalance: '' as string, // 本地余额
         tokenBalances: '' as string, // 令牌余额
     },
@@ -16,13 +18,22 @@ export default {
     state: states,
     mutations: {
         // 初始化Moralis
-        async init(state, user: any) {
-            state.user.accounts = user.accounts || [] // 保存用户信息
-            state.user.username = user.username || '' // 保存用户信息
+        async init(state, account: any) {
+            state.user.account = account || '' // 保存用户信息
+        },
+        // 用户信息
+        async get_info(state) {
+            let user = state.user.account
+            web3.getBalance(user).then((res) => {
+                state.user.nativeBalance = String(res.substring(0, res.length - 14) / 10000)
+            })
+            web3.getTokensBalance(user).then((res) => {
+                state.user.tokenBalances = String(res.substring(0, res.length - 14) / 10000)
+            })
         },
         // logout
         async logout(state, paylaod: boolean) {
-            state.user = { accounts: [], username: '', nativeBalance: '', tokenBalances: '' }
+            state.user = { account: '', nativeBalance: '', tokenBalances: '' }
         },
     },
     actions: {
@@ -30,6 +41,11 @@ export default {
         init({ commit }, paylaod: boolean) {
             commit('init', paylaod)
         },
+        // 用户信息
+        get_info({ commit }, paylaod: boolean) {
+            commit('get_info', paylaod)
+        },
+        // 注销
         logout({ commit }, paylaod: boolean) {
             commit('logout', paylaod)
         },

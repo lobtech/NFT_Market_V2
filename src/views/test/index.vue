@@ -1,5 +1,5 @@
 <template>
-    <div style="padding: 20px; background-image: linear-gradient(to bottom, royalblue, rgb(2, 2, 1)); display: flex; justify-content: center; flex-direction: column; align-items: center">
+    <div style="padding: 20px; background-image: linear-gradient(to left, rgb(44, 72, 158), rgb(2, 2, 1)); display: flex; justify-content: center; flex-direction: column; align-items: center">
         <div class="card">
             <div class="card-title">合约配置</div>
             <div class="card-row" v-for="(item, index) in contracts" :key="index">
@@ -53,17 +53,21 @@
             <div class="card-title">领取货币（调用某个合约直接领取货币10个）</div>
             <div class="card-row">
                 <div class="card-row-title">合约名称</div>
-                <input type="text" placeholder="test" v-model="input_b_1" />
+                <input type="text" placeholder="test" v-model="input_c_1" />
             </div>
             <div class="card-row">
                 <div class="card-row-title">货币地址</div>
-                <input type="text" placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="input_b_2" />
+                <input type="text" placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="input_c_2" />
+            </div>
+            <div class="card-row">
+                <div class="card-row-title">剩余奖池</div>
+                <input type="text" disabled placeholder="1000.0000" v-model="pool" />
             </div>
             <div class="card-row">
                 <div class="card-row-title">是否可领</div>
                 <input type="text" disabled placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="eligible" />
             </div>
-            <div class="card-btn" @click="web3.distribute(input_c_1, input_c_2)">确认</div>
+            <div class="card-btn" @click="web3.distribute(input_c_1, input_c_2, store.state.moralis?.user.account)">确认</div>
         </div>
     </div>
 </template>
@@ -77,7 +81,7 @@ import { login, logout } from '../home/js/left'
 
 // 引入公共计算属性
 import { Accounts } from '../home/js/left'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import store from '@/store'
 const input = ref('')
 
@@ -90,20 +94,28 @@ input_a_2.value = contracts.airdrop.address
 input_a_3.value = '100'
 
 const input_b_1 = ref('')
-const input_b_2 = ref(true)
+const input_b_2 = ref(false)
 
-input_b_1.value = store.state.moralis?.user.accounts[0] || ''
+input_b_1.value = store.state.moralis?.user.account || ''
 
 const input_c_1 = ref('')
 const input_c_2 = ref('')
 const eligible = ref(false)
+const pool = ref(0)
 
 input_c_1.value = contracts.airdrop.name
 input_c_2.value = contracts.money.address
 
-// 查询是否可领取
-web3.eligible().then((res) => {
-    console.log(`---------->日志输出:res`, res)
+// 查询奖池
+web3.pool().then((res) => {
+    // console.log(`---------->日志输出:res`, res)
+    // 已存在就不可领取
+    // console.log(`---------->日志输出:num`, num)
+    pool.value = res.substring(0, res.length - 14) / 10000
+})
+
+web3.eligible(input_b_1.value).then((res) => {
+    // console.log(`---------->日志输出:res`, res)
     // 已存在就不可领取
     eligible.value = !res
 })

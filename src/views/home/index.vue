@@ -11,9 +11,12 @@ import homeC from './components/HomeC.vue'
 
 import { computed } from 'vue'
 import store from '@/store'
-import web3 from '@/tools/moralis'
+import { getData } from './js/right'
 
-web3.start() // 连接moralis服务器
+setTimeout(() => {
+    getData('Market')
+}, 0)
+
 const innerWidth = computed(() => store.state.sys?.innerWidth || 0) // 监听屏幕宽度
 </script>
 

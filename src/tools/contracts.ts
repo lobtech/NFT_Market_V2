@@ -956,7 +956,7 @@ const money = {
 // 空投合约
 const airdrop = {
     name: 'airdrop',
-    address: '0xe9204B935f32829EE52A8f6D158609bF25F1813D',
+    address: '0xF722fECd5657D79F7E69EC90B52F4931d2B804c5',
     abi: [
         {
             "anonymous": false,
