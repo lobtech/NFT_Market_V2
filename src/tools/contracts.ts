@@ -956,96 +956,142 @@ const money = {
 // 空投合约
 const airdrop = {
     name: 'airdrop',
-    address: '0x4B4726C4562719F066F5E36070Ecb68d7de65Cb0',
+    address: '0xe9204B935f32829EE52A8f6D158609bF25F1813D',
     abi: [
         {
-            anonymous: false,
-            inputs: [
+            "anonymous": false,
+            "inputs": [
                 {
-                    indexed: true,
-                    internalType: 'address',
-                    name: 'previousOwner',
-                    type: 'address',
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "previousOwner",
+                    "type": "address"
                 },
                 {
-                    indexed: true,
-                    internalType: 'address',
-                    name: 'newOwner',
-                    type: 'address',
-                },
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
             ],
-            name: 'OwnershipTransferred',
-            type: 'event',
+            "name": "OwnershipTransferred",
+            "type": "event"
         },
         {
-            inputs: [
+            "inputs": [
                 {
-                    internalType: 'contract IERC20',
-                    name: 'token',
-                    type: 'address',
-                },
-                {
-                    internalType: 'address',
-                    name: 'userAddress',
-                    type: 'address',
-                },
-                {
-                    internalType: 'uint256',
-                    name: 'amount',
-                    type: 'uint256',
-                },
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
             ],
-            name: 'distribute',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
+            "name": "contains",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
         },
         {
-            inputs: [],
-            name: 'isOwner',
-            outputs: [
+            "inputs": [
                 {
-                    internalType: 'bool',
-                    name: '',
-                    type: 'bool',
-                },
+                    "internalType": "contract IERC20",
+                    "name": "token",
+                    "type": "address"
+                }
             ],
-            stateMutability: 'view',
-            type: 'function',
+            "name": "distribute",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
         },
         {
-            inputs: [],
-            name: 'owner',
-            outputs: [
+            "inputs": [],
+            "name": "isOwner",
+            "outputs": [
                 {
-                    internalType: 'address',
-                    name: '',
-                    type: 'address',
-                },
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
             ],
-            stateMutability: 'view',
-            type: 'function',
+            "stateMutability": "view",
+            "type": "function"
         },
         {
-            inputs: [],
-            name: 'renounceOwnership',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
         },
         {
-            inputs: [
-                {
-                    internalType: 'address',
-                    name: 'newOwner',
-                    type: 'address',
-                },
-            ],
-            name: 'transferOwnership',
-            outputs: [],
-            stateMutability: 'nonpayable',
-            type: 'function',
+            "inputs": [],
+            "name": "renounceOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
         },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                },
+                {
+                    "internalType": "bool",
+                    "name": "state",
+                    "type": "bool"
+                }
+            ],
+            "name": "setUsers",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "newOwner",
+                    "type": "address"
+                }
+            ],
+            "name": "transferOwnership",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "users",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        }
     ],
 }
 

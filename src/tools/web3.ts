@@ -60,30 +60,32 @@ const approve = (contractName: string = 'test', contractAddress: string = '0xF55
             console.log(`---------->日志输出:err`, err)
         })
 }
-// 领取货币
-const distribute = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', num: string = '10') => {
-    const { abi, address } = (contracts as any)[contractName]
+
+// 设置某个人的领取状态
+const setAirdrop = async (userAddress: string = '', state: boolean = true) => {
+    const { abi, address } = contracts['airdrop']
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
     let user = store.state.moralis?.user.accounts[0]
-    console.log(`---------->日志输出:user`, user)
-    // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
+    const res = await contract.methods.setUsers(userAddress, state).send({ from: user })
+    // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
+    console.log(`---------->日志输出:call_test`, res)
+}
+
+// 是否可领取(用户地址)
+const eligible = async (userAddress: string = '') => {
+    const { abi, address } = contracts['airdrop']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    return await contract.methods.contains(userAddress).call()
+}
+// 领取货币(什么合约，货币地址，谁)
+const distribute = (contractName: string = 'test', contractAddress: string = '', from: string = '') => {
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
     // 发送交易，使用事件获取返回结果
-    contract.methods
-        .distribute(contractAddress, user, `${Number(num) * Math.pow(10, 18)}`)
-        .send({ from: user })
-        .on('transactionHash', function (hash: any) {
-            console.log(`---------->日志输出:hash`, hash)
-        })
-        .on('receipt', function (receipt: any) {
-            console.log(`---------->日志输出:receipt`, receipt)
-        })
-        .on('confirmation', function (confirmationNumber: any, receipt: any) {
-            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
-        })
-        .on('error', (err: any) => {
-            console.log(`---------->日志输出:err`, err)
-        })
+    return contract.methods.distribute(contractAddress).send({ from })
 }
 
 // 调用一个合约的函数
@@ -189,6 +191,8 @@ export default {
     getBalance,
     getContract,
     approve,
+    setAirdrop,
+    eligible,
     distribute,
     setApprovalForAll,
     call,
