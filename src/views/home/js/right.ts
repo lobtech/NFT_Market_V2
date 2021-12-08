@@ -56,16 +56,26 @@ const getData = async (type: string = title.value) => {
         // 超市数据
         case 'Market':
             {
-                const res = await moralis.getNFTOwners('0xE81C077d2258A08869622f984733B0aF8843fD2c')
-                // list.value = res.result
-                list.value = _list
+                const user = store.state.moralis?.user.account as string
+                // const res = await moralis.getNFTOwners(contracts.gameItems.address)
+                const res = await moralis.getNFTsForContrac(user, contracts.gameItems.address)
+                for (const item of res.result) {
+                    item.metadata = await moralis.getMetadata(item.token_uri)
+                }
+                console.log(`---------->日志输出:res`, res)
+                // getMetadata
+                list.value = res.result
+                // list.value = _list
             }
             break
         case 'My Items':
             {
                 const address = store.state.moralis?.user.account as string
-                const res: any = await moralis.getNFTs(address)
-                // console.log(`---------->日志输出:res`, res)
+                // const res: any = await moralis.getAllTokenIds(contracts.gameItems.address)
+                let user = store.state.moralis?.user.account
+                let users = [user, user] as string[]
+                const res: any = await web3.balanceOfBatch('gameItems', users, ['0', '1'])
+                console.log(`---------->日志输出:res`, res)
                 list.value = res.result || []
             }
             break
@@ -110,11 +120,10 @@ const getData = async (type: string = title.value) => {
 
 // Metadata
 const Metadata = computed(() => {
-    return function (item: string, key: string) {
-        if (!item) return ''
-        let obj = JSON.parse(item)
-        // console.log(`---------->日志输出:obj`, obj)
-        return obj[key]
+    return async function (token_uri: string, key: string) {
+        let metadata = await moralis.getMetadata(token_uri)
+        console.log(`---------->日志输出:metadata`,metadata);
+        return metadata[key] || ''
     }
 })
 

@@ -25,6 +25,7 @@
 import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
 import { state_list, state, class_list, _class, rarity_list, rarity } from '../js/right'
 
+
 // 引入公共方法
 import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
 import { selectState, selectClass, selectRarity } from '../js/right'

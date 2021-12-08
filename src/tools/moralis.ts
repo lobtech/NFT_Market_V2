@@ -9,7 +9,7 @@ let appId = 'KRhsgl0BHaod6RoqUz0m2aIILRYjSvmQzg1idYa9' // appid
 
 // 测试网
 if (isTest) {
-    chain = 'bsc testnet' as string // 区块链名
+    chain = 'avalanche testnet' as string // 区块链名
     serverUrl = 'https://iryujqeq3c0k.usemoralis.com:2053/server' as string // 服务器地址
     appId = 'pgxFvaT0RRCnC9efXnb6f6Ck9WxudIoscdigwwpU' as string // appid
 }
@@ -93,12 +93,22 @@ const callCloud = async () => {
     const res = await Moralis.Cloud.run('test', params)
     console.log(`---------->日志输出:res`, res)
 }
+// 请求云函数
+const getMetadata = async (url: string) => {
+    return Moralis.Cloud.run('getMetadata', { url })
+}
 
 //  getTokenAllowance(合约地址，令牌所有者地址，令牌使用者地址)
 const getTokenAllowance = async (address: string, owner_address: string, spender_address: string) => {
     console.log(`---------->查询合约全部资产类型:address`, address)
     const res = await Moralis.Web3API.token.getTokenAllowance({ chain, address, owner_address, spender_address })
     console.log(`---------->日志输出:res`, res)
+}
+
+// 查询某个人的某个合约的所有资产（谁，哪个合约）
+const getNFTsForContrac = async (address: string, token_address: string) => {
+    console.log(`---------->getNFTsForContrac:`, address)
+    return Moralis.Web3API.account.getNFTsForContract({ chain, address, token_address })
 }
 //  搜索(合约地址，令牌所有者地址，令牌使用者地址)
 const searchNFTs = async (q: string, filter: string, _chain: string = chain) => {
@@ -118,6 +128,8 @@ export default {
     getAllTokenIds,
     transfer,
     callCloud,
+    getMetadata,
+    getNFTsForContrac,
     getTokenAllowance,
     searchNFTs,
 }

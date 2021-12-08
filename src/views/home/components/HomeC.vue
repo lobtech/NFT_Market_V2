@@ -110,21 +110,21 @@
                 <div class="list-none" v-if="list.length === 0">IS NULL</div>
                 <div class="list-item" v-for="(item, index) in list" :key="index">
                     <div class="list-item-card">
-                        <div class="img" :style="[{ 'background-image': `url( ${Metadata(item.metadata, 'image')} )` }]"></div>
+                        <div class="img" :style="[{ 'background-image': `url( ${item.metadata.image} )` }]"></div>
                         <div class="content">
                             <div class="row">
-                                <div>{{ Metadata(item.metadata, 'name') }}.V10</div>
-                                <div style="color: rgba(255, 255, 255, 1); font-size: 16px">0.8800TNT</div>
+                                <div style="font-size: 18px">{{ item.metadata.name }}</div>
+                                <div style="color: rgba(255, 255, 255, 1); font-size: 16px">{{ item.metadata.price }}LOB</div>
                             </div>
-                            <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ Metadata(item.metadata, 'description') }}</div>
-                            <div class="row" style="color: #7092c0; opacity: 0.7">
+                            <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ item.metadata.describe }}</div>
+                            <!-- <div class="row" style="color: #7092c0; opacity: 0.7">
                                 <div>Feng</div>
                                 <div>shuil</div>
                                 <div style="color: azure">200</div>
                                 <div>|</div>
                                 <div>Magic</div>
                                 <div>188</div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

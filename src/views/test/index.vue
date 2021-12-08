@@ -69,6 +69,26 @@
             </div>
             <div class="card-btn" @click="web3.distribute(input_c_1, input_c_2, store.state.moralis?.user.account)">确认</div>
         </div>
+        <div class="card">
+            <div class="card-title">装备授权（允许其他合约调用我的所有装备）</div>
+            <div class="card-row">
+                <div class="card-row-title">合约名称</div>
+                <input type="text" placeholder="test" v-model="input_d_1" />
+            </div>
+            <div class="card-row">
+                <div class="card-row-title">授权地址</div>
+                <input type="text" placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="input_d_2" />
+            </div>
+            <div class="card-row">
+                <div class="card-row-title">授权状态</div>
+                <input type="text" placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="input_d_3" />
+            </div>
+            <div class="card-btn" @click="web3.setApprovalForAll(input_d_1, input_d_2, input_d_3, store.state.moralis?.user.account)">确认</div>
+        </div>
+        <div class="card">
+            <div class="card-title">购买</div>
+            <div class="card-btn" @click="web3.buy('0x5F94d5a8c4b7E6d1449eFab780c973E95131D27E', '0', '1')">确认</div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -119,6 +139,12 @@ web3.eligible(input_b_1.value).then((res) => {
     // 已存在就不可领取
     eligible.value = !res
 })
+
+const input_d_1 = ref('')
+const input_d_2 = ref('')
+const input_d_3 = ref(false)
+input_d_1.value = contracts.gameItems.name
+input_d_2.value = contracts.buy.address
 </script>
 
 <style lang="less" scoped>

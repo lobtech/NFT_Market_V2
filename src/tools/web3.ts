@@ -106,14 +106,52 @@ const eligible = async (userAddress: string = '') => {
 
 // 领取货币(什么合约，货币地址，谁)
 const distribute = (contractName: string = 'test', contractAddress: string = '', from: string = '') => {
-    
-    
-    console.log(`---------->日志输出:`,from);
+    console.log(`---------->日志输出:`, from)
     const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
     // 发送交易，使用事件获取返回结果
     return contract.methods.distribute(contractAddress).send({ from })
+}
+
+// 授权(物品地址，物品id，数量)
+const setApprovalForAll = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', state: boolean = false, from: string = '') => {
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    return contract.methods.setApprovalForAll(contractAddress, state).send({ from })
+}
+// 查询某个人的所有装备
+const balanceOfBatch = (contractName: string = 'test', users: string[] = [], ids: string[] = [], from: string = '') => {
+    const { abi, address } = (contracts as any)[contractName]
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    return contract.methods.balanceOfBatch(users, ids).call()
+}
+
+// 购买商品(物品地址，物品id，数量)
+const buy = (contractAddress: string, id: string, num: string) => {
+    const { abi, address } = contracts['buy']
+    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
+    const contract = new web3.eth.Contract(abi, address) // 创建合约
+    let user = store.state.moralis?.user.account
+    // 价格写死了 一件1块钱
+    let value = Number(num) * Math.pow(10, 18)
+    contract.methods
+        .buy(contractAddress, id, num)
+        .send({ from: user, value })
+        .on('transactionHash', function (hash: any) {
+            console.log(`---------->日志输出:hash`, hash)
+        })
+        .on('receipt', function (receipt: any) {
+            console.log(`---------->日志输出:receipt`, receipt)
+        })
+        .on('confirmation', function (confirmationNumber: any, receipt: any) {
+            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
+        })
+        .on('error', (err: any) => {
+            console.log(`---------->日志输出:err`, err)
+        })
 }
 
 // 调用一个合约的函数
@@ -153,66 +191,6 @@ const send = () => {
         })
 }
 
-// 设置合约访问白名单 主合约名，新增合约地址 ，发起人
-const setApprovalForAll = async (contractName: string = 'test', contractAddress: string = '', from: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC') => {
-    if (!contractAddress || !from) {
-        console.log(`---------->日志输出:参数异常{ contractName = 'test', contractAddress = '', from = '' }`, { contractName, contractAddress, from })
-    }
-    const { abi, address } = (contracts as any)[contractName]
-    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
-    const contract = new web3.eth.Contract(abi, address) // 创建合约
-    const res = await contract.methods.setApprovalForAll(contractAddress, true).send({ from })
-    console.log(`---------->日志输出:setApprovalForAll`, res)
-}
-
-// 上架
-const addListing = () => {
-    const { abi, address } = contracts['nftTreader']
-    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
-    const contract = new web3.eth.Contract(abi, address) // 创建合约
-    // 发送交易，使用事件获取返回结果
-    contract.methods
-        .addListing(222, contracts['GameItems']['address'], '2')
-        // .addListing(contracts['GameItems']['address'], '1', 45)
-        .send({ from: '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC' })
-        .on('transactionHash', function (hash: any) {
-            console.log(`---------->日志输出:hash`, hash)
-        })
-        .on('receipt', function (receipt: any) {
-            console.log(`---------->日志输出:receipt`, receipt)
-        })
-        .on('confirmation', function (confirmationNumber: any, receipt: any) {
-            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
-        })
-        .on('error', (err: any) => {
-            console.log(`---------->日志输出:err`, err)
-        })
-}
-
-// 购买
-const purchase = () => {
-    const { abi, address } = contracts['nftTreader']
-    const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
-    const contract = new web3.eth.Contract(abi, address) // 创建合约
-    // 发送交易，使用事件获取返回结果
-    contract.methods
-        .purchase(contracts['GameItems']['address'], '2', 1)
-        // .addListing(contracts['GameItems']['address'], '1', 45)
-        .send({ from: '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC' })
-        .on('transactionHash', function (hash: any) {
-            console.log(`---------->日志输出:hash`, hash)
-        })
-        .on('receipt', function (receipt: any) {
-            console.log(`---------->日志输出:receipt`, receipt)
-        })
-        .on('confirmation', function (confirmationNumber: any, receipt: any) {
-            console.log(`---------->日志输出:confirmationNumber, receipt`, confirmationNumber, receipt)
-        })
-        .on('error', (err: any) => {
-            console.log(`---------->日志输出:err`, err)
-        })
-}
-
 export default {
     net,
     login,
@@ -225,9 +203,9 @@ export default {
     pool,
     eligible,
     distribute,
+    buy,
     setApprovalForAll,
+    balanceOfBatch,
     call,
     send,
-    addListing,
-    purchase,
 }

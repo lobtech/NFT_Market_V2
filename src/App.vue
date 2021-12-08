@@ -24,6 +24,7 @@ try {
 
     // 首次判断matemask网络是否正确
     const { chainId, networkVersion } = store.state.moralis as any
+    console.log(`---------->日志输出:chainId, networkVersion`,chainId, networkVersion);
 
     // 首次进入网络不正确自动注销
     if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) logout() // 注销
