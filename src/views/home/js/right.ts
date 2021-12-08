@@ -56,9 +56,8 @@ const getData = async (type: string = title.value) => {
         // 超市数据
         case 'Market':
             {
-                const user = store.state.moralis?.user.account as string
                 // const res = await moralis.getNFTOwners(contracts.gameItems.address)
-                const res = await moralis.getNFTsForContrac(user, contracts.gameItems.address)
+                const res = await moralis.getNFTsForContrac('0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', contracts.gameItems.address)
                 for (const item of res.result) {
                     item.metadata = await moralis.getMetadata(item.token_uri)
                 }
@@ -122,7 +121,7 @@ const getData = async (type: string = title.value) => {
 const Metadata = computed(() => {
     return async function (token_uri: string, key: string) {
         let metadata = await moralis.getMetadata(token_uri)
-        console.log(`---------->日志输出:metadata`,metadata);
+        console.log(`---------->日志输出:metadata`, metadata)
         return metadata[key] || ''
     }
 })

@@ -17,25 +17,25 @@ web3.start() // 连接服务器
 onMounted(() => {
     window.onresize = () => store.dispatch('sys/get_screen_size') // 监听屏幕尺寸
     login(false) // 登录
+    try {
+        const ethereum = (window as any).ethereum
+
+        // 首次判断matemask网络是否正确
+        const { chainId, networkVersion } = store.state.moralis as any
+        console.log(`---------->日志输出:chainId, networkVersion`, chainId, networkVersion)
+        console.log(`---------->日志输出:ethereum.chainId !== chainId`, ethereum.chainId, chainId, ethereum.chainId !== chainId)
+        console.log(`---------->日志输出:ethereum.networkVersion !== networkVersion`, ethereum.networkVersion, networkVersion, ethereum.networkVersion !== networkVersion)
+        // 首次进入网络不正确自动注销
+        if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) logout() // 注销
+
+        // 切换账号自动注销
+        ethereum.on('accountsChanged', logout)
+
+        // 切换网络自动注销
+        ethereum.on('networkChanged', logout)
+    } catch (error) {
+        console.log(`---------->ethereum警告:`, error)
+    }
 })
-
-try {
-    const ethereum = (window as any).ethereum
-
-    // 首次判断matemask网络是否正确
-    const { chainId, networkVersion } = store.state.moralis as any
-    console.log(`---------->日志输出:chainId, networkVersion`,chainId, networkVersion);
-
-    // 首次进入网络不正确自动注销
-    if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) logout() // 注销
-
-    // 切换账号自动注销
-    ethereum.on('accountsChanged', logout)
-
-    // 切换网络自动注销
-    ethereum.on('networkChanged', logout)
-} catch (error) {
-    console.log(`---------->ethereum警告:`, error)
-}
 </script>
 <style></style>

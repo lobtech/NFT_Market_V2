@@ -1,6 +1,6 @@
 <template>
     <div class="homeB">
-        <loading :show="loadingShow"></loading>
+        <loading :show="loadingShow" index="9999"></loading>
         <div class="left-menu">
             <div class="user">
                 <div class="logo" @click="toPage()"><img src="@/assets/image/logo.png" alt="" /></div>
