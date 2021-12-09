@@ -112,6 +112,8 @@ const setTitle = (value: string) => {
 
 // 选择菜单
 const selectMenuItem: any = async (index: string) => {
+    console.log(index, '7788');
+    
     // console.log(`---------->日志输出:index`, index)
     if (index === 'My Items' && !store.state.moralis?.user.account) {
         await login()
