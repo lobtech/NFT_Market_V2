@@ -51,7 +51,7 @@ const getContract = async (contractName: string = 'test') => {
 }
 
 // 授权某个合约可使用我的货币
-const approve = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', num: string = '10') => {
+const approve = (contractName: string = 'test', contractAddress: string = '', num: string = '10') => {
     const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
@@ -60,7 +60,7 @@ const approve = (contractName: string = 'test', contractAddress: string = '0xF55
     // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
     // 发送交易，使用事件获取返回结果
     contract.methods
-        .approve(contractAddress, `${Number(num) * Math.pow(10, 18)}`)
+        .approve(contractAddress, `${num}${Math.pow(10, 18)}`)
         .send({ from: user })
         .on('transactionHash', function (hash: any) {
             console.log(`---------->日志输出:hash`, hash)
