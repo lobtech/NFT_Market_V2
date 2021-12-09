@@ -69,11 +69,8 @@ const getData = async (type: string = title.value) => {
             break
         case 'My Items':
             {
-                const address = store.state.moralis?.user.account as string
-                // const res: any = await moralis.getAllTokenIds(contracts.gameItems.address)
-                let user = store.state.moralis?.user.account
-                let users = [user, user] as string[]
-                const res: any = await web3.balanceOfBatch('gameItems', users, ['0', '1'])
+                let user = store.state.moralis?.user.account as string
+                const res = await moralis.getNFTsForContrac(user, contracts.gameItems.address)
                 console.log(`---------->日志输出:res`, res)
                 list.value = res.result || []
             }

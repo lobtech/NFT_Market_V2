@@ -87,7 +87,7 @@
         </div>
         <div class="card">
             <div class="card-title">购买</div>
-            <div class="card-btn" @click="web3.buy('0x5F94d5a8c4b7E6d1449eFab780c973E95131D27E', '0', '1')">确认</div>
+            <div class="card-btn" @click="web3.buy(contracts.gameItems.address, '0', '1')">确认</div>
         </div>
     </div>
 </template>

@@ -114,8 +114,8 @@ const distribute = (contractName: string = 'test', contractAddress: string = '',
     return contract.methods.distribute(contractAddress).send({ from })
 }
 
-// 授权(物品地址，物品id，数量)
-const setApprovalForAll = (contractName: string = 'test', contractAddress: string = '0xF55c6Be2F9390301bFc66Dd9f7f52495B56301dC', state: boolean = false, from: string = '') => {
+// 授权(合约，物品id，数量)
+const setApprovalForAll = (contractName: string = 'test', contractAddress: string = '', state: boolean = false, from: string = '') => {
     const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
