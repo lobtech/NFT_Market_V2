@@ -1,13 +1,13 @@
 <template>
     <div class="relative home">
-        <loading :show="loadingShow2"></loading>
+        <loading :show="_loading_show_2"></loading>
         <div class="tip" v-if="!Accounts" @click="login()">connect to wallek</div>
         <!-- 头部 -->
         <div class="title">
             <div class="title-logo" @click="hasMenu()">
                 <img src="../../../assets/image/fix.png" alt="" />
             </div>
-            <div class="title-text">{{ 'MARKET' || title }}</div>
+            <div class="title-text">{{ 'MARKET' || _title }}</div>
             <div class="title-right">
                 <img src="../../../assets/image/logo.png" alt="" />
                 <!-- <svg class="z-icon" aria-hidden="true">
@@ -20,43 +20,43 @@
         </div>
         <!-- 分割线 -->
         <div class="menu-list" v-if="menu_show">
-            <div class="select" :class="[{ 'select-active': IsActive('0', isShow) }]">
+            <div class="select" :class="[{ 'select-active': IsActive('0', _is_show) }]">
                 <div class="title" @click="changeShow('0')">
                     <div>NFT Marketplace</div>
                     <img src="@/assets/image/top.png" alt="" />
                 </div>
                 <div class="list">
-                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in marketplace_list" :key="index">
+                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], _title) }]" v-for="(item, index) in _marketplace_list" :key="index">
                         <div class="item-content" @click="selectMenuItem(item['name'])">
-                            <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                            <img :src="IsActive(item['name'], _title) ? item['icon_active'] : item['icon']" alt="" />
                             <div>{{ item['name'] }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="select" :class="[{ 'select-active': IsActive('1', isShow) }]">
+            <div class="select" :class="[{ 'select-active': IsActive('1', _is_show) }]">
                 <div class="title" @click="changeShow('1')">
                     <div>Prediction</div>
                     <img src="@/assets/image/top.png" alt="" />
                 </div>
                 <div class="list">
-                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in prediction_list" :key="index">
+                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], _title) }]" v-for="(item, index) in _prediction_list" :key="index">
                         <div class="item-content" @click="selectMenuItem(item['name'])">
-                            <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                            <img :src="IsActive(item['name'], _title) ? item['icon_active'] : item['icon']" alt="" />
                             <div>{{ item['name'] }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="select" :class="[{ 'select-active': IsActive('2', isShow) }]">
+            <div class="select" :class="[{ 'select-active': IsActive('2', _is_show) }]">
                 <div class="title" @click="changeShow('2')">
                     <div>Other</div>
                     <img src="@/assets/image/top.png" alt="" />
                 </div>
                 <div class="list">
-                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], title) }]" v-for="(item, index) in other_list" :key="index">
+                    <div class="item" :class="[{ 'item-active': IsActive(item['name'], _title) }]" v-for="(item, index) in _other_list" :key="index">
                         <div class="item-content" @click="selectMenuItem(item['name'])">
-                            <img :src="IsActive(item['name'], title) ? item['icon_active'] : item['icon']" alt="" />
+                            <img :src="IsActive(item['name'], _title) ? item['icon_active'] : item['icon']" alt="" />
                             <div>{{ item['name'] }}</div>
                         </div>
                     </div>
@@ -67,25 +67,25 @@
         <!-- 筛选商品 -->
         <div class="fillter">
             <div class="buttons">
-                 <div class="switch">
-                    <div class="switch-item" :class="[{ 'switch-item-active': IsActive(item, state) }]" v-for="(item, index) in state_list" :key="index" @click="selectState(item)">{{ item }}</div>
+                <div class="switch">
+                    <div class="switch-item" :class="[{ 'switch-item-active': IsActive(item, _state) }]" v-for="(item, index) in _state_list" :key="index" @click="selectState(item)">{{ item }}</div>
                 </div>
-                 <div class="odds">
+                <div class="odds">
                     <div class="odds-row">
                         <div class="row-title">Class：</div>
-                        <div class="row-item" :class="[{ 'row-item-active': IsActive(item, _class) }]" v-for="(item, index) in class_list" :key="index" @click="selectClass(item)">{{ item }}</div>
+                        <div class="row-item" :class="[{ 'row-item-active': IsActive(item, _class) }]" v-for="(item, index) in _class_list" :key="index" @click="selectClass(item)">{{ item }}</div>
                     </div>
                     <div class="odds-row">
                         <div class="row-title">Rarity：</div>
-                        <div class="row-item" :class="[{ 'row-item-active': IsActive(item, rarity) }]" v-for="(item, index) in rarity_list" :key="index" @click="selectRarity(item)">{{ item }}</div>
+                        <div class="row-item" :class="[{ 'row-item-active': IsActive(item, _rarity) }]" v-for="(item, index) in _rarity_list" :key="index" @click="selectRarity(item)">{{ item }}</div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- 商品 -->
         <div class="list">
-            <div class="list-none" v-if="list.length === 0">IS NULL</div>
-            <div class="list-item" v-for="(item, index) in list" :key="index">
+            <div class="list-none" v-if="_list.length === 0">IS NULL</div>
+            <div class="list-item" v-for="(item, index) in _list" :key="index">
                 <div class="list-item-card">
                     <div class="img" :style="[{ 'background-image': `url( ${Metadata(item.metadata, 'image')} )` }]"></div>
                     <div class="content">
@@ -94,7 +94,7 @@
                             <div style="color: rgba(255, 255, 255, 1); font-size: 16px">0.8800TNT</div>
                         </div>
                         <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ Metadata(item.metadata, 'description') }}</div>
-                        <div class="row" style="color: #7092c0;">
+                        <div class="row" style="color: #7092c0">
                             <div>Feng</div>
                             <div>shuil</div>
                             <div style="color: azure">200</div>
@@ -111,11 +111,11 @@
 <script setup lang="ts">
 import loading from '@/components/loading/loading.vue'
 // 引入公共变量
-import { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow } from '../js/left'
-import { state_list, state, class_list, _class, rarity_list, rarity, list, loadingShow2 } from '../js/right'
+import { _loading_show, _marketplace_list, _prediction_list, _other_list, _title, _is_show } from '../js/left'
+import { _state_list, _state, _class_list, _class, _rarity_list, _rarity, _list, _loading_show_2 } from '../js/right'
 
 // 引入公共方法
-import { setLoading, toPage, login, logout, setTitle, changeShow } from '../js/left'
+import { setLoading, toPage, login, logout, setTitle, changeShow, selectMenuItem } from '../js/left'
 import { selectState, selectClass, selectRarity } from '../js/right'
 
 // 引入公共计算属性
@@ -198,7 +198,7 @@ import { hasMenu } from '../js/moble'
             opacity: 0.8;
         }
         .title-right {
-             img {
+            img {
                 height: 32px;
                 max-height: 35px;
             }
@@ -220,7 +220,7 @@ import { hasMenu } from '../js/moble'
         color: #242736;
         background-color: #242736;
         z-index: 11;
-        animation: springtimeAniamtScale2 .5s linear;
+        animation: springtimeAniamtScale2 0.5s linear;
         .select {
             & > .title {
                 font-size: 12px;
@@ -297,14 +297,14 @@ import { hasMenu } from '../js/moble'
             }
         }
     }
-    .line{
+    .line {
         background: #7092c0;
         height: 2.5vw;
         position: fixed;
         left: 0;
         width: 100%;
     }
-    .fillter{
+    .fillter {
         padding: 25px 16px 15px 16px;
         border-bottom: 2px solid #7092c0;
         color: #fff;
@@ -314,7 +314,7 @@ import { hasMenu } from '../js/moble'
         top: 14vw;
         width: 100%;
         background-color: rgba(36, 39, 54, 1);
-        .buttons{
+        .buttons {
             .switch {
                 display: flex;
                 align-items: center;

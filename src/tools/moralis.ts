@@ -88,7 +88,7 @@ const transfer = async () => {
 
 // 请求云函数
 const callCloud = async () => {
-    let user = store.state.moralis?.user.account
+    let user = store.state.user?.account
     const params = { contractAddress: '0xff2b673601950a0F164B67dF6f6765366a8c1419', list: [{ beneficiary: user, amount: `${10 * Math.pow(10, 18)}` }] }
     const res = await Moralis.Cloud.run('test', params)
     console.log(`---------->日志输出:res`, res)

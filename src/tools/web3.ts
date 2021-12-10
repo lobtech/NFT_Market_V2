@@ -55,7 +55,7 @@ const approve = (contractName: string = 'test', contractAddress: string = '', nu
     const { abi, address } = (contracts as any)[contractName]
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    let user = store.state.moralis?.user.account
+    let user = store.state.user?.account || ''
     console.log(`---------->日志输出:user`, user)
     // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
     // 发送交易，使用事件获取返回结果
@@ -81,7 +81,7 @@ const setAirdrop = async (userAddress: string = '', state: boolean = false) => {
     const { abi, address } = contracts['airdrop']
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    let user = store.state.moralis?.user.account
+    let user = store.state.user?.account
     // console.log(`---------->日志输出:state`, state)
     const res = await contract.methods.setUsers(userAddress, state).send({ from: user })
     // const res = await contract.methods.test('0x9a4244c1d438810f09f468dfc2ea4cf40ad93c10', '2').call()
@@ -134,7 +134,7 @@ const buy = (contractAddress: string, id: string, num: string) => {
     const { abi, address } = contracts['buy']
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    let user = store.state.moralis?.user.account
+    let user = store.state.user?.account
     // 价格写死了 一件1块钱
     let value = Number(num) * Math.pow(10, 18)
     contract.methods
@@ -169,7 +169,7 @@ const send = () => {
     const { abi, address } = contracts['airdrop']
     const web3 = new Web3((window as any).ethereum) // 创建一个新的web3 对象
     const contract = new web3.eth.Contract(abi, address) // 创建合约
-    let user = store.state.moralis?.user.account
+    let user = store.state.user?.account
     console.log(`---------->日志输出:user`, user)
     // console.log(`---------->日志输出:Moralis.Units.Token("0.5", "18")`, Moralis.Units.Token('0.5', '18'))
     // 发送交易，使用事件获取返回结果

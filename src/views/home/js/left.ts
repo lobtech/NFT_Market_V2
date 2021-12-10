@@ -5,9 +5,9 @@ import { computed, readonly, ref } from 'vue'
 import { getData } from '../js/right'
 
 // 首屏加载
-const loadingShow = ref(false) // 加载状态
+const _loading_show = ref(false) // 加载状态
 const setLoading = (value: boolean) => {
-    loadingShow.value = value
+    _loading_show.value = value
 }
 
 // 跳转
@@ -22,7 +22,7 @@ const login = async (show: boolean = true) => {
     const ethereum = (window as any).ethereum
 
     // 首次判断matemask网络是否正确
-    const { chainId, networkVersion } = store.state.moralis as any
+    const { chainId, networkVersion } = store.state.web3 as any
 
     // 首次进入网络不正确自动注销
     if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) {
@@ -37,23 +37,21 @@ const login = async (show: boolean = true) => {
         setLoading(false)
     }
     if (user) {
-        console.log(`---------->日志输出:user`, user)
-        await store.dispatch('moralis/init', user.attributes.accounts[0])
-        await store.dispatch('moralis/get_info')
+        // console.log(`---------->日志输出:user`, user)
+        await store.dispatch('set', { k: 'user.account', v: user.attributes.accounts[0] })
+        await store.dispatch('user/get_info')
     }
 }
 
 // 登出
 const logout = async () => {
     setLoading(true)
-    // console.log(`---------->未登录:user`, user)
-    await moralis.logOut()
-    store.dispatch('moralis/logout', true)
+    await store.dispatch('user/logout', true)
     setLoading(false)
 }
 
 // marketplace菜单项
-const marketplace_list = [
+const _marketplace_list = [
     {
         name: 'Market',
         icon: import.meta.globEager('../../../assets/image/market.png')['../../../assets/image/market.png'].default,
@@ -72,7 +70,7 @@ const marketplace_list = [
 ]
 
 // prediction菜单项菜单项
-const prediction_list = [
+const _prediction_list = [
     {
         name: 'Eggs',
         icon: import.meta.globEager('../../../assets/image/market.png')['../../../assets/image/market.png'].default,
@@ -86,7 +84,7 @@ const prediction_list = [
 ]
 
 // other菜单项
-const other_list = [
+const _other_list = [
     {
         name: 'Wiki',
         icon: import.meta.globEager('../../../assets/image/market.png')['../../../assets/image/market.png'].default,
@@ -105,17 +103,15 @@ const other_list = [
 ]
 
 // 标题
-const title = ref('Market') // 选择菜单子项
+const _title = ref('Market') // 选择菜单子项
 const setTitle = (value: string) => {
-    title.value = value
+    _title.value = value
 }
 
 // 选择菜单
-const selectMenuItem: any = async (index: string) => {
-    console.log(index, '7788');
-    
+const selectMenuItem = async (index: string) => {
     // console.log(`---------->日志输出:index`, index)
-    if (index === 'My Items' && !store.state.moralis?.user.account) {
+    if (index === 'My Items' && !store.state.user?.account) {
         await login()
     }
     await getData(index)
@@ -123,9 +119,9 @@ const selectMenuItem: any = async (index: string) => {
 }
 
 // 菜单展开收起
-const isShow = ref('0') // 默认0展开
+const _is_show = ref('0') // 默认0展开
 const changeShow = (index: string): void => {
-    isShow.value = index
+    _is_show.value = index
 }
 
 // 是否已激活
@@ -136,27 +132,27 @@ const IsActive = computed(() => {
 })
 
 // 用户唯一标识
-const Accounts = computed(() => store.state.moralis?.user.account)
+const Accounts = computed(() => store.state.user?.account)
 
 // 余额
-const NativeBalance = computed(() => store.state.moralis?.user.nativeBalance)
+const NativeBalance = computed(() => store.state.user?.nativeBalance)
 
 // 令牌余额
-const TokenBalances = computed(() => store.state.moralis?.user.tokenBalances)
+const TokenBalances = computed(() => store.state.user?.tokenBalances)
 
 // 显示的用户名
 const Username = computed(() => {
     return function (length: number = 4) {
-        let username = store.state.moralis?.user.account as string
+        let username = store.state.user?.account as string
         return `${username.slice(0, length)}****${username.slice(-length)}`
     }
 })
 
 // 导出公共变量
-export { loadingShow, marketplace_list, prediction_list, other_list, title, selectMenuItem, isShow }
+export { _loading_show, _marketplace_list, _prediction_list, _other_list, _title, _is_show }
 
 // 导出公共方法
-export { setLoading, toPage, login, logout, setTitle, changeShow }
+export { setLoading, toPage, login, logout, setTitle, changeShow, selectMenuItem }
 
 // 导出公共计算属性
 export { IsActive, Accounts, NativeBalance, TokenBalances, Username }

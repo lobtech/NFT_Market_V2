@@ -21,10 +21,7 @@ onMounted(() => {
         const ethereum = (window as any).ethereum
 
         // 首次判断matemask网络是否正确
-        const { chainId, networkVersion } = store.state.moralis as any
-        console.log(`---------->日志输出:chainId, networkVersion`, chainId, networkVersion)
-        console.log(`---------->日志输出:ethereum.chainId !== chainId`, ethereum.chainId, chainId, ethereum.chainId !== chainId)
-        console.log(`---------->日志输出:ethereum.networkVersion !== networkVersion`, ethereum.networkVersion, networkVersion, ethereum.networkVersion !== networkVersion)
+        const { chainId, networkVersion } = store.state.web3 as any
         // 首次进入网络不正确自动注销
         if (ethereum.chainId !== chainId || ethereum.networkVersion !== networkVersion) logout() // 注销
 

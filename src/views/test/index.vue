@@ -67,7 +67,7 @@
                 <div class="card-row-title">是否可领</div>
                 <input type="text" disabled placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="eligible" />
             </div>
-            <div class="card-btn" @click="web3.distribute(input_c_1, input_c_2, store.state.moralis?.user.account)">确认</div>
+            <div class="card-btn" @click="web3.distribute(input_c_1, input_c_2, store.state.user?.account)">确认</div>
         </div>
         <div class="card">
             <div class="card-title">装备授权（允许其他合约调用我的所有装备）</div>
@@ -83,7 +83,7 @@
                 <div class="card-row-title">授权状态</div>
                 <input type="text" placeholder="0x9a4244c1d438810F09F468DfC2Ea4cf40Ad93c10" v-model="input_d_3" />
             </div>
-            <div class="card-btn" @click="web3.setApprovalForAll(input_d_1, input_d_2, input_d_3, store.state.moralis?.user.account)">确认</div>
+            <div class="card-btn" @click="web3.setApprovalForAll(input_d_1, input_d_2, input_d_3, store.state.user?.account)">确认</div>
         </div>
         <div class="card">
             <div class="card-title">购买</div>
@@ -116,7 +116,7 @@ input_a_3.value = '100'
 const input_b_1 = ref('')
 const input_b_2 = ref(false)
 
-input_b_1.value = store.state.moralis?.user.account || ''
+input_b_1.value = store.state.user?.account || ''
 
 const input_c_1 = ref('')
 const input_c_2 = ref('')

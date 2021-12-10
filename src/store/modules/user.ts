@@ -1,50 +1,52 @@
+import web3 from '@/tools/web3'
 import { Module } from 'vuex'
 import { State } from '..'
-// 定义数组item的类型
-type role = {
-    name: string
+
+// 用户的信息
+const states = {
+    account: '' as string, // 用户地址
+    nativeBalance: '' as string, // 本地余额
+    tokenBalances: '' as string, // 令牌余额
 }
 
-// 定义state类型
-const states = {
-    name: 'test' as string,
-    age: 0 as number,
-    roles: [] as role[],
-}
 export type typeof_user = typeof states
 export default {
     namespaced: true,
     state: states,
     mutations: {
-        // 初始化用户
-        init(state, paylaod: typeof_user) {
-            console.log(`---------->日志输出:paylaod`, paylaod)
-            // for (const key in paylaod) {
-            //     state[key] = paylaod[key]
-            // }
-            state['name'] = paylaod['name']
-            state['age'] = paylaod['age']
-            state['roles'] = paylaod['roles']
+        // 初始化Moralis
+        init(state, account: any) {
+            state.account = account || '' // 保存用户信息
         },
-        // 初始化用户角色
-        initRoles(state, paylaod: role[]) {
-            console.log(`---------->日志输出:paylaod`, paylaod)
-            state.roles = paylaod
+        // 用户信息
+        get_info(state) {
+            let user = state.account
+            web3.getBalance(user).then((res) => {
+                state.nativeBalance = String(res.substring(0, res.length - 14) / 10000)
+            })
+            web3.getTokensBalance(user).then((res) => {
+                state.tokenBalances = String(res.substring(0, res.length - 14) / 10000)
+            })
         },
-        // 添加用户角色
-        addRole(state, payload: role) {
-            state.roles.push(payload)
+        // logout
+        logout(state, paylaod: boolean) {
+            state['account'] = ''
+            state['nativeBalance'] = ''
+            state['tokenBalances'] = ''
         },
     },
     actions: {
-        init({ commit }, paylaod: typeof_user) {
+        // login
+        init({ commit }, paylaod: boolean) {
             commit('init', paylaod)
         },
-        initRoles({ commit }, paylaod: role[]) {
-            commit('initRoles', paylaod)
+        // 用户信息
+        get_info({ commit }, paylaod: boolean) {
+            commit('get_info', paylaod)
         },
-        addRole({ commit }, paylaod: role) {
-            commit('addRole', paylaod)
+        // 注销
+        logout({ commit }, paylaod: boolean) {
+            commit('logout', paylaod)
         },
     },
 } as Module<typeof_user, State>

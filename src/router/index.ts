@@ -7,21 +7,25 @@ const routes = [
     {
         name: 'home',
         path: '/home',
-        component: () => import('../views/home/index.vue'),
+        component: () => import('@/views/home/index.vue'),
         meta: {
             keepAlive: true,
-            showFooter: true,
-            transition: 'slide-right',
         },
     },
     {
         name: 'test',
         path: '/test',
-        component: () => import('../views/test/index.vue'),
+        component: () => import('@/views/test/index.vue'),
         meta: {
             keepAlive: true,
-            showFooter: true,
-            transition: 'slide-right',
+        },
+    },
+    {
+        name: 'test2',
+        path: '/test2',
+        component: () => import('@/views/test2/index.vue'),
+        meta: {
+            keepAlive: true,
         },
     },
 ]
