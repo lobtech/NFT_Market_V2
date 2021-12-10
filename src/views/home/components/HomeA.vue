@@ -85,23 +85,13 @@
         <!-- 商品 -->
         <div class="list">
             <div class="list-none" v-if="_list.length === 0">IS NULL</div>
+
             <div class="list-item" v-for="(item, index) in _list" :key="index">
                 <div class="list-item-card">
-                    <div class="img" :style="[{ 'background-image': `url( ${Metadata(item.metadata, 'image')} )` }]"></div>
+                    <div class="img" :style="[{ 'background-image': `url( ${item.image} )` }]"></div>
                     <div class="content">
-                        <div class="row">
-                            <div>{{ Metadata(item.metadata, 'name') }}.V10</div>
-                            <div style="color: rgba(255, 255, 255, 1); font-size: 16px">0.8800TNT</div>
-                        </div>
-                        <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ Metadata(item.metadata, 'description') }}</div>
-                        <div class="row" style="color: #7092c0">
-                            <div>Feng</div>
-                            <div>shuil</div>
-                            <div style="color: azure">200</div>
-                            <div>|</div>
-                            <div>Magic</div>
-                            <div>188</div>
-                        </div>
+                        <div class="row" style="font-size: 1.2vw">{{ item.name || '' }}</div>
+                        <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ item.price || '' }}LOB</div>
                     </div>
                 </div>
             </div>

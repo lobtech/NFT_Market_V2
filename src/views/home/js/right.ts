@@ -59,20 +59,29 @@ const getData = async (type: string = _title.value) => {
                 let data = { page: 1, limit: 20, cate: '', sort: '', order: '' }
                 const res = await api.get_goods({ data })
                 console.log(`---------->日志输出:res`, res)
+                let list = res.data.list || []
+                for (const item of list) {
+                    item.name = item.nft.name
+                    item.price = item.itemList[0].item.price
+                    item.image = JSON.parse(item.nft.metadataContent).image.replace('ipfs://', '/')
+                }
                 _list.value = res.data.list || []
             }
             break
         // 个人数据
         case 'My Items':
             {
+                _list.value = []
             }
             break
         case 'Sell':
             {
+                _list.value = []
             }
             break
         default:
             {
+                _list.value = []
             }
             break
     }

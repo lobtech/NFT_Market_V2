@@ -79,14 +79,11 @@
                 <div class="list-none" v-if="_list.length === 0">IS NULL</div>
                 <div class="list-item" v-for="(item, index) in _list" :key="index">
                     <div class="list-item-card">
-                        <div class="img" :style="[{ 'background-image': `url( '' )` }]"></div>
+                        <div class="img" :style="[{ 'background-image': `url( ${item.image} )` }]"></div>
 
                         <div class="content">
-                            <div class="row" style="font-size: 1.2vw">
-                                <div style="font-size: 18px">{{ item.nft.name }}</div>
-                                <div style="color: rgba(255, 255, 255, 1); font-size: 1.1vw">{{ item.nft.name || '' }}LOB</div>
-                            </div>
-                            <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ item.nft.name || '' }}</div>
+                            <div class="row" style="font-size: 1.2vw">{{ item.name }}</div>
+                            <div class="row" style="color: rgba(255, 255, 255, 0.3)">{{ item.price || '' }}LOB</div>
                         </div>
                     </div>
                 </div>

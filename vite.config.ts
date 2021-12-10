@@ -13,6 +13,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''),
             },
+            '/ipfs': {
+                target: 'http://ipfs.hbeasts.com/',
+                changeOrigin: true,
+                // rewrite: (path) => path.replace(/^\/api/, ''),
+            },
         },
     },
     define: {
